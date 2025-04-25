@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { AppStoreContext } from "../providers/StoreProvider";
+import { AppStoreContext } from "../providers/store.provider.tsx";
 import { IAppStore } from "../store";
 
 export function useAppStoreSelector<T>(selector: (state: IAppStore) => T): T {
