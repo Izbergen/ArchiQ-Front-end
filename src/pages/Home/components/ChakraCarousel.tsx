@@ -68,6 +68,7 @@ export default function Carousel() {
                 position="absolute"
                 right={'20px'}
                 top={top}
+                fontWeight={'bold'}
                 transform={'translate(0%, -50%)'}
                 zIndex={100}
                 onClick={() => slider?.slickNext()}>

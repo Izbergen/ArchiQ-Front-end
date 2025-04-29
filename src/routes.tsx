@@ -1,7 +1,7 @@
 import {lazy, Suspense} from "react";
 import {Route, Routes} from "react-router-dom";
 
-import {AppLayout} from "@/pages/Layout.tsx";
+import {AppLayout} from "@/pages/layout.tsx";
 
 import {HomeSkeleton} from "@/pages/Home";
 
@@ -17,6 +17,9 @@ export default function AppRoutes(){
                         <HomePage />
                     </Suspense>
                 } />
+            </Route>
+            <Route path={'/auth'}>
+
             </Route>
         </Routes>
     )

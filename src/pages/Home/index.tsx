@@ -10,6 +10,9 @@ export default function HomePage() {
     const service = useDI<ILoggerService>(CoreTypes.LoggerService)
     service.log("HomePage")
     return (
+        <>
+            <div className={'text-amber-300'}>hsbcjhbdkscjhsdbjcbsdjhcbsdjhcbsdjhbchjsdc</div>
         <Carousel />
+        </>
     )
 }
