@@ -1,0 +1,22 @@
+@font-face {
+    font-family: "StyreneALC-Bold";
+    src: url("./StyreneALC-Bold.otf") format("opentype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+@font-face {
+    font-family: "StyreneALC-Regular";
+    src: url("./StyreneALC-Regular.otf") format("opentype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+
+}
+@font-face {
+    font-family: "StyreneALC-Medium";
+    src: url("./StyreneALC-Medium.otf") format("opentype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Box, IconButton, useBreakpointValue } from '@chakra-ui/react'
-import { FaChevronRight , FaChevronLeft } from "react-icons/fa";
+import { LuChevronRight , LuChevronLeft } from "react-icons/lu";
 import Slider, {Settings} from 'react-slick'
 
 const settings: Settings = {
@@ -32,65 +32,69 @@ export default function Carousel() {
                alignItems="center"
                height="100vh" // на весь экран по высоте
                width="100vw" >
-        <Box position={'relative'} width={'90vw'} height={'500px'}>
-            {/* CSS files for react-slick */}
-            <link
-                rel="stylesheet"
-                type="text/css"
-                href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-            />
-            <link
-                rel="stylesheet"
-                type="text/css"
-                href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-            />
-            <IconButton
-                aria-label="left-arrow"
-                colorScheme="messenger"
-                borderRadius="full"
-                position="absolute"
-                left={'20px'}
-                borderWidth={'3px'}
-                borderColor={'white'}
-                top={top}
-                transform={'translate(0%, -50%)'}
-                zIndex={100}
-                onClick={() => slider?.slickPrev()}>
-                <FaChevronLeft />
-            </IconButton>
+            <Box position={'relative'} width={'90vw'} height={'500px'}>
+                {/* CSS files for react-slick */}
+                <link
+                    rel="stylesheet"
+                    type="text/css"
+                    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+                />
+                <link
+                    rel="stylesheet"
+                    type="text/css"
+                    href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+                />
+                <IconButton
+                    aria-label="left-arrow"
+                    colorScheme="messenger"
+                    borderRadius="full"
+                    position="absolute"
+                    backgroundColor="#52A0FF"
 
-            <IconButton
-                aria-label="right-arrow"
-                colorScheme="messenger"
-                borderRadius="full"
-                borderWidth={'3px'}
-                borderColor={'white'}
-                position="absolute"
-                right={'20px'}
-                top={top}
-                fontWeight={'bold'}
-                transform={'translate(0%, -50%)'}
-                zIndex={100}
-                onClick={() => slider?.slickNext()}>
-                <FaChevronRight />
-            </IconButton>
-            <Box width={'90vw'} height={'500px'} overflow={'hidden'}>
-            <Slider  {...settings} ref={(slider) => setSlider(slider)}>
-                {cards.map((url, index) => (
-                    <Box
-                        key={index}
-                        height={'6xl'}
-                        position="relative"
-                        backgroundPosition="center"
-                        backgroundRepeat="no-repeat"
-                        backgroundSize="cover"
-                        backgroundImage={`url(${url})`}
-                    />
-                ))}
+                    left={'-20px'}
+                    borderWidth={'3px'}
+                    borderColor={'white'}
+                    top={top}
+                    transform={'translate(0%, -50%)'}
+                    zIndex={100}
+                    _hover={{bg: '#31619C'}}
+                    onClick={() => slider?.slickPrev()}>
+                    <LuChevronLeft width={100} />
+                </IconButton>
 
-            </Slider>
+                <IconButton
+                    aria-label="right-arrow"
+                    colorScheme="messenger"
+                    borderRadius="full"
+                    borderWidth={'3px'}
+                    backgroundColor={'#52A0FF'}
+                    borderColor={'white'}
+                    position="absolute"
+                    right={'-20px'}
+                    top={top}
+                    transform={'translate(0%, -50%)'}
+                    zIndex={100}
+                    _hover={{bg: '#31619C'}}
+                    onClick={() => slider?.slickNext()}>
+                    <LuChevronRight width={10} />
+                </IconButton>
+                <Box width={'90vw'} height={'500px'} overflow={'hidden'}>
+                    <Slider  {...settings} ref={(slider) => setSlider(slider)}>
+                        {cards.map((url, index) => (
+                            <Box
+                                key={index}
+                                height={'6xl'}
+                                position="relative"
+                                backgroundPosition="center"
+                                backgroundRepeat="no-repeat"
+                                backgroundSize="cover"
+                                backgroundImage={`url(${url})`}
+                            />
+                        ))}
+
+                    </Slider>
+                </Box>
             </Box>
-        </Box>
         </Box>
     )
 }
