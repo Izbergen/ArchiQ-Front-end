@@ -1,7 +1,9 @@
-import {SkeletonText} from "@chakra-ui/react";
+import {Flex} from "@chakra-ui/react";
 
-export function VerifyUserPage() {
+export default function VerifyUserPage() {
     return (
-        <SkeletonText noOfLines={2} />
+        <Flex direction="column" alignItems="center" justifyContent="space-between">
+
+        </Flex>
     )
 }

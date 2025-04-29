@@ -11,7 +11,6 @@ export const textStyles = defineTextStyles({
         description: "The body text style - used in heading",
         value: {
             fontFamily: "StyreneALC-Bold",
-            fontSize: "96px",
         },
     }
 })

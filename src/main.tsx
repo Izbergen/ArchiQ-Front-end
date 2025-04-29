@@ -4,19 +4,15 @@ import {BrowserRouter} from "react-router-dom";
 import "./index.css";
 
 import App from './app.tsx'
-import {Spinner, Text, VStack} from "@chakra-ui/react";
+
 import {UIProvider} from "@/general/providers/ui.provider.tsx";
+import {AppFallback} from "@/general/components/AppFallback";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <BrowserRouter>
           <UIProvider>
-              <Suspense fallback={
-                  <VStack colorPalette="teal">
-                      <Spinner color="colorPalette.600" />
-                      <Text color="colorPalette.600">Application Loading...</Text>
-                  </VStack>
-              } >
+              <Suspense fallback={<AppFallback />} >
                   <App />
               </Suspense>
           </UIProvider>
