@@ -1,7 +1,7 @@
 import {
     createSystem,
     defaultConfig,
-    defineConfig
+    defineConfig, SystemConfig
 } from "@chakra-ui/react"
 
 import { defineTextStyles } from "@chakra-ui/react"
@@ -14,7 +14,7 @@ export const textStyles = defineTextStyles({
         },
     }
 })
-const config = defineConfig({
+const config: SystemConfig = defineConfig({
     theme: {
         textStyles,
         tokens: {
