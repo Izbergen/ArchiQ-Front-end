@@ -1,27 +1,19 @@
-import {lazy, Suspense} from "react";
+import {lazy} from "react";
 import {Route, Routes} from "react-router-dom";
 
-import {AppLayout} from "@/pages/layout.tsx";
+import {AppLayout} from "@/pages/appLayout.tsx";
+import AuthRoutes from "@/pages/auth";
 
-import {HomeSkeleton} from "@/pages/home";
-import {AuthLayout, VerifyUserPage} from "@/pages/auth";
-
-const HomePage = lazy(() => import('@/pages/home'));
-
+const HomePage = lazy(() => import('@/pages/home/page'));
 
 export default function AppRoutes(){
     return (
         <Routes>
-            <Route path="/" element={<AppLayout />}>
-                <Route index element={
-                    <Suspense fallback={<HomeSkeleton />}>
-                        <HomePage />
-                    </Suspense>
-                } />
+            <Route path="*" element={<AppLayout />}>
+                <Route index element={<HomePage />} />
             </Route>
-            <Route path={'/auth'} element={<AuthLayout />}>
-                <Route index element={<VerifyUserPage />} />
-            </Route>
+
+            <Route path="/auth/*" element={<AuthRoutes />} />
         </Routes>
     )
 }
