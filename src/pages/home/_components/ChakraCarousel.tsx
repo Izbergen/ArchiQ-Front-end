@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import { Box, IconButton, useBreakpointValue } from '@chakra-ui/react'
+import { Box, Text, IconButton, useBreakpointValue } from '@chakra-ui/react'
 import { LuChevronRight , LuChevronLeft } from "react-icons/lu";
 import Slider, {Settings} from 'react-slick'
 
@@ -30,9 +30,9 @@ export default function Carousel() {
         <Box   display="flex"
                justifyContent="center"
                alignItems="center"
-               height="100vh" // на весь экран по высоте
+               // height="100vh" // на весь экран по высоте
                width="100vw" >
-            <Box position={'relative'} width={'90vw'} height={'500px'}>
+            <Box position={'relative'} width={'90vw'} height={'720px'}>
                 {/* CSS files for react-slick */}
                 <link
                     rel="stylesheet"
@@ -50,9 +50,10 @@ export default function Carousel() {
                     borderRadius="full"
                     position="absolute"
                     backgroundColor="#52A0FF"
-
-                    left={'-20px'}
-                    borderWidth={'3px'}
+                    width={'48px'}
+                    height={'48px'}
+                    left={'-24px'}
+                    borderWidth={'5px'}
                     borderColor={'white'}
                     top={top}
                     transform={'translate(0%, -50%)'}
@@ -66,11 +67,13 @@ export default function Carousel() {
                     aria-label="right-arrow"
                     colorScheme="messenger"
                     borderRadius="full"
-                    borderWidth={'3px'}
+                    borderWidth={'5px'}
                     backgroundColor={'#52A0FF'}
+                    width={'48px'}
+                    height={'48px'}
                     borderColor={'white'}
                     position="absolute"
-                    right={'-20px'}
+                    right={'-24px'}
                     top={top}
                     transform={'translate(0%, -50%)'}
                     zIndex={100}
@@ -78,7 +81,7 @@ export default function Carousel() {
                     onClick={() => slider?.slickNext()}>
                     <LuChevronRight width={10} />
                 </IconButton>
-                <Box width={'90vw'} height={'500px'} overflow={'hidden'}>
+                <Box width={'90vw'} height={'720px'} overflow={'hidden'}>
                     <Slider  {...settings} ref={(slider) => setSlider(slider)}>
                         {cards.map((url, index) => (
                             <Box
@@ -89,7 +92,11 @@ export default function Carousel() {
                                 backgroundRepeat="no-repeat"
                                 backgroundSize="cover"
                                 backgroundImage={`url(${url})`}
-                            />
+                            >
+                                <Text textStyle={'StyreneALCBold'} fontSize={'96px'} color={"white"}>SDU Residence</Text>
+                                <Text textStyle={'StyreneALCMiddle'} fontSize={'24px'} color={'white'}>Your perfect choice for modern life</Text>
+                            </Box>
+
                         ))}
 
                     </Slider>
