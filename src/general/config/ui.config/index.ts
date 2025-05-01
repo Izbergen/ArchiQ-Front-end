@@ -5,6 +5,7 @@ import {
 } from "@chakra-ui/react"
 
 import { defineTextStyles } from "@chakra-ui/react"
+import {buttonRecipe} from "./theme/recipes/buttons.ts";
 
 export const textStyles = defineTextStyles({
     StyreneALCBold: {
@@ -16,6 +17,9 @@ export const textStyles = defineTextStyles({
 })
 const config: SystemConfig = defineConfig({
     theme: {
+        recipes: {
+            Button: buttonRecipe,
+        },
         textStyles,
         tokens: {
             colors: {

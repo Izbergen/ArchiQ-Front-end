@@ -2,7 +2,7 @@ import {useDI} from "@/general/hooks/useDI.ts";
 import {CoreTypes} from "@/general/di/modules/core";
 
 import {ILoggerService} from "@/general/services/logger";
-import Carousel from "./components/ChakraCarousel.tsx";
+import Carousel from "@/pages/home/_components/ChakraCarousel.tsx";
 import {Text} from "@chakra-ui/react";
 import {FONTS} from "@/general/constants/fonts.constants.ts";
 

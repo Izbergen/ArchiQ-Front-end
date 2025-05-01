@@ -3,7 +3,7 @@ import { withMask } from "use-mask-input";
 import { COLORS, FONTS } from "@/general/constants";
 import {useNavigate} from "react-router-dom";
 
-export default function VerifyUserPage() {
+export default function CheckPhonePage() {
     const nav = useNavigate();
     return (
         <Flex

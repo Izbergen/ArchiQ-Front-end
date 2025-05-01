@@ -1,16 +1,17 @@
-import {Field, Button, Flex, Text , PinInput} from "@chakra-ui/react";
+import {Field, Button, Flex, Text } from "@chakra-ui/react";
 import {COLORS, FONTS} from "@/general/constants";
 import {useNavigate} from "react-router-dom";
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from "react-hook-form"
 import { z } from "zod"
+import {PinInput} from "./../_general/components/PinInput.tsx";
 
 
 const formSchema = z.object({
     pin: z
         .array(z.string().min(1), { required_error: "Нужно ввести пин код" })
-        .length(4, { message: "Пин должен состоять из 4 цифр" }),
+        .length(6, { message: "Пин должен состоять из 6 цифр" }),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -48,24 +49,16 @@ export default function OTPCodePage() {
             >
                 Мы отправили его на указанный вам номер
             </Text>
-            <Field.Root invalid={!!formState.errors.pin} w={'200px'} mx="auto" mb='4'>
+            <Field.Root invalid={!!formState.errors.pin} w={'275px'} mx="auto" mb='4'>
                 <Controller
                     control={control}
                     name="pin"
                     render={({ field }) => (
-                        <PinInput.Root
-                            size={'md'}
+                        <PinInput
                             value={field.value}
                             onValueChange={(e) => field.onChange(e.value)}
-                        >
-                            <PinInput.HiddenInput />
-                            <PinInput.Control>
-                                <PinInput.Input index={0} />
-                                <PinInput.Input index={1} />
-                                <PinInput.Input index={2} />
-                                <PinInput.Input index={3} />
-                            </PinInput.Control>
-                        </PinInput.Root>
+                            count={6}
+                        />
                     )}
                 />
                 <Field.ErrorText fontFamily={FONTS.StyreneALC.BOLD} fontSize={'sm'}>{formState.errors.pin?.message}</Field.ErrorText>

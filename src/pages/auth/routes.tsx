@@ -5,15 +5,16 @@ import {AuthLayout} from "@/pages/auth/layout.tsx";
 
 import AuthSkeleton from "./skeleton.tsx";
 
-const VerifyUserPage = lazy(() => import('./verify-user/page'))
+const CheckPhonePage = lazy(() => import('./check-phone/page'))
 const OTPCodePage = lazy(() => import('./otp-code/page'))
-export default function AuthRoutes(){
+
+export function AuthRoutes(){
     return (
         <Routes>
             <Route path={'/'} element={<AuthLayout />}>
                 <Route index element={
                     <Suspense fallback={<AuthSkeleton />}>
-                        <VerifyUserPage />
+                        <CheckPhonePage />
                     </Suspense>} />
                 <Route path={'/otp-code'} element={
                     <Suspense fallback={<AuthSkeleton />}>
