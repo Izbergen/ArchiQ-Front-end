@@ -4,17 +4,9 @@ import {
     defineConfig, SystemConfig
 } from "@chakra-ui/react"
 
-import { defineTextStyles } from "@chakra-ui/react"
-import {buttonRecipe} from "./theme/recipes/buttons.ts";
+import {textStyles} from "./theme/textStyles";
+import {buttonRecipe} from "./theme/recipes/buttons";
 
-export const textStyles = defineTextStyles({
-    StyreneALCBold: {
-        description: "The body text style - used in heading",
-        value: {
-            fontFamily: "StyreneALC-Bold",
-        },
-    }
-})
 const config: SystemConfig = defineConfig({
     theme: {
         recipes: {
@@ -25,6 +17,7 @@ const config: SystemConfig = defineConfig({
             colors: {
             },
         },
+
     },
 })
 
