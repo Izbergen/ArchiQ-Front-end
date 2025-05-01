@@ -2,6 +2,6 @@ import { SkeletonText } from "@chakra-ui/react"
 
 export const HomeSkeleton = () => {
     return (
-        <SkeletonText noOfLines={3} gap="4" />
+        <SkeletonText noOfLines={12} gap="4" />
     )
 }

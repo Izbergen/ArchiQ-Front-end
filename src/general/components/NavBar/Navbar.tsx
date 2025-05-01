@@ -31,15 +31,13 @@ const Navbar = () => {
             mx="auto"
             maxW="1600px"
             maxH="90px"
+            alignItems="center"
         >
-            <Flex align="center" justify="space-between">
-                {/* Logo */}
-
-
+            <Flex alignItems="center" justify="space-between">
                 {/* Center Links */}
                 <HStack gap={'20px'}>
                     <Text textStyle="StyreneALCBold" fontSize="48px" px={'25px'}>
-                        ARCHIQ
+                        AQ
                     </Text>
                     {productList.map((item) => (
                         <Link
@@ -55,7 +53,7 @@ const Navbar = () => {
                 </HStack>
 
                 {/* Right Utilities + Divider + Login */}
-                <Flex align="center">
+                <Flex alignItems="center">
                     <HStack gap={'20px'}>
                         {utilList.map((item) => (
                             <Link
@@ -69,24 +67,16 @@ const Navbar = () => {
                             </Link>
                         ))}
                     </HStack>
-
-                    {/* Vertical Rule */}
-                    {/*<Divider*/}
-                    {/*    orientation="vertical"*/}
-                    {/*    height="24px"*/}
-                    {/*    mx={6}*/}
-                    {/*    borderColor="gray.300"*/}
-                    {/*/>*/}
                     <Box
                         as="span"
                         width="3px"
                         height="20px"
-                        bg="blue.600"
+                        bg="blue.primary"
                         mx={4}
                     />
 
                     <Link
-                        href="/"
+                        href="/public"
                         textStyle="StyreneALCBold"
                         fontSize="16px"
                         _hover={{ textDecoration: "none", color: "blue.600" }}

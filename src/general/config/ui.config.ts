@@ -16,19 +16,19 @@ export const textStyles = defineTextStyles({
     StyreneALCRegular: {
         description: "The body text style - used in text",
         value: {
-            fontFamily: "StyreneALC-Bold",
+            fontFamily: "StyreneALC-Regular",
         },
     },
     StyreneALCMedium: {
         description: "The body text style - used in subheader",
         value: {
-            fontFamily: "StyreneALC-Bold",
+            fontFamily: "StyreneALC-Medium",
         },
     },
     InterBold: {
         description: "The body text style - used in login",
         value: {
-            fontFamily: "InterBold",
+            fontFamily: "IntefrBold",
         }
     },
     InterRegular: {
@@ -44,8 +44,13 @@ const config = defineConfig({
         textStyles,
         tokens: {
             colors: {
+               blue:{
+                   primary:{value: "#519FFF"},
+                   secondary:{value: "#006FFD"},
+               },
             },
         },
+
 
     },
 })
