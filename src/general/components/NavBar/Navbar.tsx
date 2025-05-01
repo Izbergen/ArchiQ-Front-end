@@ -22,7 +22,7 @@ const utilList = [
 const Navbar = () => {
     return (
         <Box
-            bg="white"
+            bg="#FFFFf"
             boxShadow="lg"
             borderRadius="2xl"
             py={4}
@@ -34,7 +34,7 @@ const Navbar = () => {
             alignItems="center"
         >
             <Flex alignItems="center" justify="space-between">
-                {/* Center Links */}
+                {/* Center LinksComponent.tsx */}
                 <HStack gap={'20px'}>
                     <Text textStyle="StyreneALCBold" fontSize="48px" px={'25px'}>
                         AQ

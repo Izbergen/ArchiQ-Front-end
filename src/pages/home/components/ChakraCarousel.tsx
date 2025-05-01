@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import {Box, Text, IconButton, useBreakpointValue, Heading, Link, Flex, HStack, VStack} from '@chakra-ui/react'
+import {Box, Text, IconButton, useBreakpointValue, Heading, Link, Flex,  VStack} from '@chakra-ui/react'
 import { LuChevronRight , LuChevronLeft } from "react-icons/lu";
 import Slider, {Settings} from 'react-slick'
 import { LuArrowUpRight } from "react-icons/lu";
