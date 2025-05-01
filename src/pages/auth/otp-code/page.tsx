@@ -1,30 +1,28 @@
-import {Field, Button, Flex, Text } from "@chakra-ui/react";
+import {Field, Flex, Text } from "@chakra-ui/react";
+
+import {PinInput} from "./../_general/components/PinInput.tsx";
+import {Button} from "@/general/components/ui/Button";
+
+
 import {COLORS, FONTS} from "@/general/constants";
 import {useNavigate} from "react-router-dom";
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from "react-hook-form"
-import { z } from "zod"
-import {PinInput} from "./../_general/components/PinInput.tsx";
+import {otpSchema ,otpInterface} from './../_general/schems.ts'
 
 
-const formSchema = z.object({
-    pin: z
-        .array(z.string().min(1), { required_error: "Нужно ввести пин код" })
-        .length(6, { message: "Пин должен состоять из 6 цифр" }),
-})
-
-type FormValues = z.infer<typeof formSchema>
 
 
 export default function OTPCodePage() {
-    const { handleSubmit, control, formState } = useForm<FormValues>({
-        resolver: zodResolver(formSchema),
+    const { handleSubmit, control, formState } = useForm<otpInterface>({
+        resolver: zodResolver(otpSchema),
     })
-
     const onSubmit = handleSubmit((data) => console.log(data))
 
-    const nav = useNavigate();
+
+
+    const navigate = useNavigate();
     return (
         <form onSubmit={onSubmit}>
         <Flex
@@ -65,32 +63,20 @@ export default function OTPCodePage() {
             </Field.Root>
 
 
-
-            <Button bg={COLORS.primary} color={'white'}
-                    _hover={{ bg: COLORS.oceanBlue ,}}
-                    fontFamily={FONTS.StyreneALC.MEDIUM}
-                    fontSize="xl"
-                    w={'400px'}
-                    py={'25px'}
-                    borderRadius="15px"
-                    mb={'2'}
-                    type="submit"
-            >
-                Продолжить
-            </Button>
-            <Button bg={'white'} color={COLORS.primary}
-                    _hover={{ bg: COLORS.oceanBlue , color: 'white' }}
-                    fontFamily={FONTS.StyreneALC.MEDIUM}
-                    fontSize="xl"
-                    w={'400px'}
-                    py={'25px'}
-                    borderRadius="15px"
-                    onClick={() => {
-                        nav(-1)
-                    }}
-            >
-                Назад
-            </Button>
+            <Flex w={'400px'} gap={'2'} direction="column">
+                <Button type={'submit'}
+                >
+                    Продолжить
+                </Button>
+                <Button variant={'ghost'}>
+                    Отправить еще код. Осталось {}
+                </Button>
+                <Button variant={'ghost'}
+                        onClick={() => navigate(-1)}
+                >
+                    Назад
+                </Button>
+            </Flex>
         </Flex>
         </form>
     );

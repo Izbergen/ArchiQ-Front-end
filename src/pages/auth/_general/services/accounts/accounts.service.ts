@@ -58,8 +58,18 @@ export class AccountsService implements IAccountsService {
     async register({} : RegisterProps): Promise<TokenPair> {
         throw new Error("Method not implemented.");
     }
-    async sendOTP({} : SendOTPProps): Promise<SendOTPResponse> {
-        throw new Error("Method not implemented.");
+    async sendOTP({phoneNumber , ...props} : SendOTPProps): Promise<SendOTPResponse> {
+        return await this.axiosService.post<
+            SendOTPResponse,
+            KeysToSnakeCase<SendOTPProps>>
+        (
+            this.apiConstants.URLS.ACCOUNTS.VERIFY_OTP,
+            {
+                phone_number: phoneNumber,
+                ...props
+            }
+        )
+
     }
     async verifyOTP({phoneNumber , ...props}: VerifyOTPProps): Promise<boolean> {
         const response = await this.axiosService.post<

@@ -1,26 +1,35 @@
 import { defineRecipe } from "@chakra-ui/react";
+import {COLORS, FONTS} from "@/general/constants";
 
 export const buttonRecipe = defineRecipe({
     base: {
-        borderRadius: "10px",
+        borderRadius: "15px",
+        fontFamily: FONTS.StyreneALC.MEDIUM,
+        py: '10px',
+        transition: "background 0.3s ease-in-out",
+        fontSize: 'xl'
     },
     variants: {
         variant: {
-            solidRounded: {
-                bg: "teal.500",
-                color: "white",
-                borderRadius: "full",
-                _hover: { bg: "teal.600" },
+            solid: {
+                bg: COLORS.primary,
+                color: 'white',
+                _hover: {
+                    bg: COLORS.oceanBlue ,
+                }
+
             },
-            ghostBordered: {
-                bg: "transparent",
-                border: "2px solid",
-                borderColor: "blue.500",
-                _hover: { bg: "blue.50" },
+            ghost: {
+                bg: 'white',
+                color: COLORS.primary,
+                _hover: {
+                    bg: COLORS.oceanBlue ,
+                    color: 'white'
+                }
             },
         },
     },
     defaultVariants: {
-        variant: "solidRounded",
+        variant: "solid",
     },
 });

@@ -1,28 +1,13 @@
-import { ContainerModule } from 'inversify';
-
-
-//
-// import {ApiConstants, IApiConstants} from "@/general/constants/api.constants.ts";
-// import { ITokenService, BrowserTokenService } from '@/general/services/token';
-// import {AxiosService, IAxiosService} from "@/general/services/axios";
-// import {ConsoleLogger, ILoggerService} from "@/general/services/logger";
+import { ContainerModule, ContainerModuleLoadOptions } from 'inversify';
+import {AccountsService, IAccountsService} from "@/pages/auth/_general/services/accounts";
+import {AuthTypes} from "@/pages/auth/_general/authModule/auth.types.ts";
 
 export const createAuthModule = (): ContainerModule =>
     new ContainerModule(
         (
-            //options: ContainerModuleLoadOptions
+            options: ContainerModuleLoadOptions
         ) => {
-        // options.bind<ITokenService>(CoreTypes.TokenService)
-        //     .to(BrowserTokenService)
-        //     .inSingletonScope();
-        //
-        // options.bind<IApiConstants>(CoreTypes.ApiConstants)
-        //     .toConstantValue(ApiConstants);
-        //
-        // options.bind<IAxiosService>(CoreTypes.AxiosService)
-        //     .to(AxiosService)
-        //     .inSingletonScope()
-        // options.bind<ILoggerService>(CoreTypes.LoggerService)
-        //     .to(ConsoleLogger)
-        //     .inSingletonScope()
+                options.bind<IAccountsService>(AuthTypes.AccountService)
+                    .to(AccountsService)
+                    .inSingletonScope()
 });
