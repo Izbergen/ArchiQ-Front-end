@@ -1,10 +1,12 @@
 'use client'
 
 import React from 'react'
-import {Box, Text, IconButton, useBreakpointValue, Heading, Link, Flex,  VStack} from '@chakra-ui/react'
+import {Box, Text, IconButton, useBreakpointValue, Heading, Link, Flex, VStack, Container, HStack} from '@chakra-ui/react'
 import { LuChevronRight , LuChevronLeft } from "react-icons/lu";
 import Slider, {Settings} from 'react-slick'
 import { LuArrowUpRight } from "react-icons/lu";
+
+import SDUPNG from '@/general/assets/colors/sdu.png'
 
 
 const settings: Settings = {
@@ -21,10 +23,12 @@ export default function Carousel() {
   const [slider, setSlider] = React.useState<Slider | null>(null)
 
   const top = useBreakpointValue({ base: '90%', md: '50%' })
+  const topText = useBreakpointValue({ base: '25%', md: '75%' })
   // const side = useBreakpointValue({ base: '30%', md: '-30%' })
+  // 'https://images.unsplash.com/photo-1612852098516-55d01c75769a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=900&q=60',
 
   const cards = [
-    'https://images.unsplash.com/photo-1612852098516-55d01c75769a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=900&q=60',
+    SDUPNG,
     'https://images.unsplash.com/photo-1627875764093-315831ac12f7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDJ8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=900&q=60',
     'https://images.unsplash.com/photo-1571432248690-7fd6980a1ae2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDl8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=900&q=60',
   ]
@@ -89,12 +93,14 @@ export default function Carousel() {
           <Box  borderRadius={'25px'} width={'90vw'} height={'720px'} overflow={'hidden'}>
             <Slider  {...settings} ref={(slider) => setSlider(slider)}>
               {cards.map((url, index) => (
-                  <Box
+                  <Flex
+                      direction={'column'}
+                      // justifyContent={'center'}
                       key={index}
-                      height={'6xl'}
+                      height={"720px"}
                       position="relative"
                       justifyContent={"end"}
-                      backgroundPosition="center"
+                      backgroundPosition="top center"
                       backgroundRepeat="no-repeat"
                       backgroundSize="cover"
                       backgroundImage={`url(${url})`}
@@ -113,52 +119,52 @@ export default function Carousel() {
                     {/*<Text textStyle={'StyreneALCBold'} fontSize={'96px'} color={"white"}>SDU Residence</Text>*/}
                     {/*<Text textStyle={'StyreneALCMiddle'} fontSize={'24px'} color={'white'}>Your perfect choice for modern life</Text>*/}
 
-                    <Flex
+                    <Container
                         position="relative"
-                        bottom={0}
-                        top={550}
-                        left={0}
-                        right={0}
-                        justifyContent="space-between"
-                        alignItems="center"
+                        top={topText}
+
+                        alignItems="start"
                         color="white"
                         p={{ base: 4, md: 8 }}
                         zIndex={2}
                     >
-                      <VStack gap={"30px"} alignItems="start" >
-                        <Heading
+                      <HStack justifyContent={'space-between'} alignItems={'center'}>
+
+                        <VStack gap={"30px"} alignItems="start" >
+                          <Heading
 
 
-                            textStyle={'StyreneALCBold'}
-                            fontSize={'96px'}
-                            as="h2"
-                            size={{ base: 'xl', md: '2xl' }}
-                            mb={2}
-                            color="white"
-                        >
-                          SDU Residence
-                        </Heading>
-                        <Text  textStyle={'StyreneALCMiddle'} fontSize={'24px'} color="white">
-                          Great place to start modern life
-                        </Text>
-                      </VStack>
-                      <Flex height={"100%"} direction="column" alignItems="center" justifyContent="flex-end">
-                        <Link
-                            marginTop={"auto"}
-                            href="/slide"
-                            color="white"
-                            textDecoration="none"
-                            _hover={{ textDecoration: 'underline' }}
-                            fontSize={'24px'}
+                              textStyle={'StyreneALCBold'}
+                              fontSize={'96px'}
+                              as="h2"
+                              size={{ base: 'xl', md: '2xl' }}
+                              mb={2}
+                              color="white"
+                          >
+                            SDU Residence
+                          </Heading>
+                          <Text  textStyle={'StyreneALCMiddle'} fontSize={'24px'} color="white">
+                            Great place to start modern life
+                          </Text>
+                        </VStack>
+                        <VStack>
 
-                        >
-                          Learn more <LuArrowUpRight  size={'24px'} color={'white'} />
+                          <Link
+                              marginTop={"auto"}
+                              href="/slide"
+                              color="white"
+                              textDecoration="none"
+                              _hover={{ textDecoration: 'underline' }}
+                              fontSize={'24px'}
 
-                        </Link>
+                          >
+                            Learn more <LuArrowUpRight  size={'24px'} color={'white'} />
 
-                      </Flex>
-                    </Flex>
-                  </Box>
+                          </Link>
+                        </VStack>
+                      </HStack>
+                    </Container>
+                  </Flex>
 
               ))}
 
