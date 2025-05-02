@@ -1,5 +1,3 @@
-// utils/applyServiceMiddleware.ts
-
 export type ServiceMethod = (...args: any[]) => Promise<any>;
 
 export type Middleware = {
@@ -9,29 +7,26 @@ export type Middleware = {
 };
 
 
-export function applyServiceMiddleware<
-    T extends { [K in keyof T]: ServiceMethod }
->(
+export function applyServiceMiddleware<T extends object>(
     service: T,
     middlewares: Middleware[]
 ): T {
-    const wrapped = {} as T;
+    return new Proxy(service, {
+        get(target, prop, receiver) {
+            const orig = Reflect.get(target, prop, receiver);
+            if (typeof orig !== 'function') return orig;
 
-    for (const key of Object.keys(service) as Array<keyof T>) {
-        const orig = service[key]!;
-        wrapped[key] = (async (...args: any[]) => {
-            middlewares.forEach(mw => mw.onCall?.(key as string, args));
-
-            try {
-                const result = await orig.apply(service, args);
-                middlewares.forEach(mw => mw.onResult?.(key as string, args, result));
-                return result;
-            } catch (error) {
-                middlewares.forEach(mw => mw.onError?.(key as string, args, error));
-                throw error;
-            }
-        }) as T[typeof key];
-    }
-
-    return wrapped;
+            return async (...args: any[]) => {
+                middlewares.forEach(mw => mw.onCall?.(prop.toString(), args));
+                try {
+                    const result = await orig.apply(target, args);
+                    middlewares.forEach(mw => mw.onResult?.(prop.toString(), args, result));
+                    return result;
+                } catch (error) {
+                    middlewares.forEach(mw => mw.onError?.(prop.toString(), args, error));
+                    throw error;
+                }
+            };
+        }
+    });
 }

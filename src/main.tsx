@@ -1,6 +1,7 @@
 import {StrictMode, Suspense} from 'react'
 import { createRoot } from 'react-dom/client'
 import {BrowserRouter} from "react-router-dom";
+import { Toaster } from 'sonner';
 import "./index.css";
 
 import App from './app.tsx'
@@ -16,6 +17,7 @@ createRoot(document.getElementById('root')!).render(
                   <App />
               </Suspense>
           </UIProvider>
+          <Toaster />
       </BrowserRouter>
   </StrictMode>,
 )

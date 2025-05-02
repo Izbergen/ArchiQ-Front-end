@@ -3,5 +3,10 @@ export const FONTS = Object.freeze({
         BOLD: 'StyreneALC-Bold',
         REGULAR: 'StyreneALC-Regular',
         MEDIUM: 'StyreneALC-Medium'
+    },
+    Inter: {
+        BOLD: 'InterBold',
+        REGULAR: 'InterRegular',
     }
+
 })

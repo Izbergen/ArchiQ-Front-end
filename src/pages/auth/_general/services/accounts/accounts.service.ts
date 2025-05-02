@@ -25,6 +25,11 @@ type VerifyOTPResponse = {
     verified: boolean,
     message: string
 }
+type RegisterResponse = {
+    phone_number: string
+    password1: string
+    password2: string
+}
 
 
 @injectable()
@@ -55,8 +60,12 @@ export class AccountsService implements IAccountsService {
         return mapTokens(response.data);
 
     }
-    async register({} : RegisterProps): Promise<TokenPair> {
-        throw new Error("Method not implemented.");
+    async register({phoneNumber, password, confirmPassword} : RegisterProps): Promise<TokenPair> {
+        return await this.axiosService.post<TokenPair,RegisterResponse>(this.apiConstants.URLS.ACCOUNTS.REGISTER, {
+            phone_number: phoneNumber,
+            password1: password,
+            password2: confirmPassword
+        })
     }
     async sendOTP({phoneNumber , ...props} : SendOTPProps): Promise<SendOTPResponse> {
         return await this.axiosService.post<

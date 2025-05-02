@@ -4,7 +4,7 @@ import {
     defineConfig, SystemConfig
 } from "@chakra-ui/react"
 
-import {textStyles} from "./theme/textStyles";
+import {coreTextStyles} from "./theme/textStyles";
 import {buttonRecipe} from "./theme/recipes/buttons";
 
 const config: SystemConfig = defineConfig({
@@ -12,7 +12,7 @@ const config: SystemConfig = defineConfig({
         recipes: {
             Button: buttonRecipe,
         },
-        textStyles,
+        textStyles: coreTextStyles,
         tokens: {
             colors: {
             },
