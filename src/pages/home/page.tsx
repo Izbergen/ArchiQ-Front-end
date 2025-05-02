@@ -8,8 +8,7 @@ import {Flex, HStack, Skeleton} from "@chakra-ui/react";
 import InfoCard from "@/general/components/InfoCard/InfoCard.tsx";
 import SingleBanner from "@/general/components/SingleBanner/SingleBanner.tsx";
 
-export * from './components/PageSkeleton'
-const Carousel = lazy(() => import('./components/ChakraCarousel.tsx'));
+const Carousel = lazy(() => import('./_components/ChakraCarousel.tsx'));
 
 export default function HomePage() {
     const service = useDI<ILoggerService>(CoreTypes.LoggerService)

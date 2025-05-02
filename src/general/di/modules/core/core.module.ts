@@ -2,7 +2,7 @@ import { ContainerModule, ContainerModuleLoadOptions } from 'inversify';
 
 import { CoreTypes } from './core.types';
 
-import {ApiConstants, IApiConstants} from "@/general/constants/api.constants.ts";
+import {API, IAPI} from "@/general/constants/api.constants.ts";
 import { ITokenService, BrowserTokenService } from '@/general/services/token';
 import {AxiosService, IAxiosService} from "@/general/services/axios";
 import {ConsoleLogger, ILoggerService} from "@/general/services/logger";
@@ -13,8 +13,8 @@ export const createCoreModule = (): ContainerModule =>
             .to(BrowserTokenService)
             .inSingletonScope();
 
-        options.bind<IApiConstants>(CoreTypes.ApiConstants)
-            .toConstantValue(ApiConstants);
+        options.bind<IAPI>(CoreTypes.ApiConstants)
+            .toConstantValue(API);
 
         options.bind<IAxiosService>(CoreTypes.AxiosService)
             .to(AxiosService)

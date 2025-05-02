@@ -1,0 +1,2 @@
+export type {IAccountsService , VerifyOTPProps, SendOTPProps , SendOTPResponse , LoginProps , CheckPhoneProps , RegisterProps} from './accounts.interface'
+export {AccountsService} from './accounts.service'

@@ -6,7 +6,7 @@ interface CardProps {
 }
 const InfoCards: React.FC<CardProps> = ({title, subtitle}) => {
     return (
-        <Card.Root size="sm" minWidth="520px" maxHeight="138px"  borderRadius="25px" px="40px" paddingBottom={'10px'} paddin >
+        <Card.Root size="sm" minWidth="520px" maxHeight="138px"  borderRadius="25px" px="40px" paddingBottom={'10px'} >
             <Card.Header>
                 <Heading fontStyle="StyreneALCBold"
                          fontSize="24px"
