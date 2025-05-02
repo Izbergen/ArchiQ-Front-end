@@ -9,6 +9,8 @@ export type LoginProps = {
     password: string;
 }
 export type RegisterProps = {
+    firstName: string;
+    lastName: string;
     phoneNumber: string;
     password: string;
     confirmPassword: string;

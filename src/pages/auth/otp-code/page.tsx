@@ -24,7 +24,7 @@ const normalizeData = (data: otpInterface) => {
 }
 
 export default function OTPCodePage() {
-    const { phoneNumber } = usePhoneNumber({redirectOnMissing: false})
+    const { phoneNumber } = usePhoneNumber({redirectOnMissing: true})
     const {verifyOTP, sendOTP , isCooldown , secondsLeft} = useAuth()
     const { handleSubmit, control, formState } = useForm<otpInterface>({
         resolver: zodResolver(otpSchema),
