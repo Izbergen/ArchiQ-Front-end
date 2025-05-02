@@ -4,12 +4,11 @@ import Footer from "@/general/components/Footer/Footer.tsx";
 import {Box} from "@chakra-ui/react";
 export function AppLayout() {
 
-    return<>
+    return (
+        <Box bg={'#F8F8F8'}>
         <Navbar/>
-        <Box bgColor={"#F8F8F8"} minHeight={'100vh'}>
-            <Outlet />
-
-        </Box>
+        <Outlet />
         <Footer/>
-    </>
+    </Box>
+    )
 }

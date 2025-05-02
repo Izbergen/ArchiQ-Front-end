@@ -4,7 +4,7 @@ import {
     Heading,
     Text,
     Link,
-    useBreakpointValue,
+    useBreakpointValue, HStack, Flex,
 } from '@chakra-ui/react'
 import { LuArrowUpRight } from "react-icons/lu";
 
@@ -36,60 +36,68 @@ const SingleBanner: React.FC<HeroBannerProps> = ({
     const linkSize = useBreakpointValue({ base: 'sm', md: 'md' })
 
     return (
-        <Box
-            width={'90vw'}
-            position="relative"
+
+           <Box
+               width="100%"
+               position="relative"
             bgImage={`url(${backgroundImage})`}
             bgSize="cover"
             bgPos="center"
-            borderRadius="2xl"
+            borderRadius="25px"
             overflow="hidden"
             minH={{ base: '300px', md: '400px' }}
-        >
-            {/* dark overlay */}
+            >
+
             <Box
                 position="absolute"
                 inset={0}
                 bg="blackAlpha.600"
             />
 
-            {/* content */}
+
             <Box
                 position="relative"
                 color="white"
                 p={padding}
-                height="100%"
+                height={{ base: '300px', md: '400px' }}
                 display="flex"
                 flexDirection="column"
                 justifyContent="space-between"
             >
-                <Box>
+                <Flex h={'full'} direction={'column'} justifyContent="space-between" >
+
                     <Heading fontSize={logoSize} fontWeight="bold" mb={4}>
                         {logoText}
                     </Heading>
+                    <HStack justifyContent="space-between" alignItems="baseline" >
 
-                    <Text
-                        fontSize={descSize}
-                        maxW={{ base: 'full', md: '2xl' }}
-                        lineHeight="tall"
-                    >
-                        {description}
-                    </Text>
-                </Box>
+                        <Text
+                            fontSize={descSize}
+                            maxW={{ base: 'full', md: '2xl' }}
+                            lineHeight="tall"
+                        >
+                            {description}
+                        </Text>
 
-                <Link
-                    href={detailLink}
-                    display="inline-flex"
-                    alignItems="center"
-                    fontSize={linkSize}
-                    color={'white'}
-                    fontWeight="semibold"
-                >
-                    {detailText}
-                    <LuArrowUpRight/>
-                </Link>
+
+                        <Link
+
+                            href={detailLink}
+                            display="inline-flex"
+                            alignItems="center"
+                            fontSize={linkSize}
+                            color={'white'}
+                            fontWeight="semibold"
+                        >
+                            {detailText}
+                            <LuArrowUpRight/>
+                        </Link>
+                    </HStack>
+                </Flex>
             </Box>
         </Box>
+
+
     )
 }
 

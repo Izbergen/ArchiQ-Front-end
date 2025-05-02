@@ -1,6 +1,7 @@
 import React from 'react';
 import { LinksComponent } from '@/general/components/LinksComponent/Links.tsx';
-import {HStack, VStack,  Box} from '@chakra-ui/react';
+import {HStack, VStack, Center} from '@chakra-ui/react';
+import {Container} from "@/general/components/ui/Container/Container.tsx";
 
 const Footer: React.FC = () => {
     const Projects = [
@@ -25,26 +26,29 @@ const Footer: React.FC = () => {
     ];
 
     return (
-        <Box bg={'white'}  as="footer"  minH={"401px"} maxW={"1500px"} mx={'auto'} display={'flex'} flexDirection={"column"} justifyContent={'center'}>
-            <HStack align="start" width={'full'} wrap="wrap" mx={"auto"} justifyContent="space-between" >
-                {/* Projects */}
-                <LinksComponent title="Projects" items={Projects} />
+        <Center bg={'white'}  as="footer"  pt={'80px'} pb={'94px'}>
+            <Container>
+                <HStack align="start" width={'full'} wrap="wrap" mx={"auto"} justifyContent="space-around" >
+                    {/* Projects */}
+                    <LinksComponent title="Projects" items={Projects} />
 
-                {/* Contacts */}
-                <LinksComponent title="Contacts" items={Contacts} />
+                    {/* Contacts */}
+                    <LinksComponent title="Contacts" items={Contacts} />
 
-                {/* About Company */}
-                <LinksComponent title="About Company" items={AboutCompany} />
+                    {/* About Company */}
+                    <LinksComponent title="About Company" items={AboutCompany} />
 
-                {/* Address + AI-Assistant */}
-                <VStack align="start" gap={2}>
-                    <LinksComponent title={"Almaty, Kazakhstan"} items={[{subtitle: "Ablyaikhan st.", link: ""}]} />
+                    {/* Address + AI-Assistant */}
+                    <VStack align="start" gap={2}>
+                        <LinksComponent title={"Almaty, Kazakhstan"} items={[{subtitle: "Ablyaikhan st.", link: ""}]} />
 
-                    <LinksComponent title={"AI-Assistant"} />
-                    <LinksComponent title={"+7 777 777 77 77"} />
-                </VStack>
-            </HStack>
-        </Box>
+                        <LinksComponent title={"AI-Assistant"} />
+                        <LinksComponent title={"+7 777 777 77 77"} />
+                    </VStack>
+                </HStack>
+
+            </Container>
+        </Center>
     );
 };
 
