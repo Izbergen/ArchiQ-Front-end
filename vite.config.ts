@@ -20,6 +20,7 @@ export default defineConfig({
     }
   },
   preview: {
+    allowedHosts: ['localhost', 'slyamgazy.kz'],
     port: PORT,
     host: HOST,
 

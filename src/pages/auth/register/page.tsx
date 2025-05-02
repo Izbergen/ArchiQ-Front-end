@@ -16,7 +16,7 @@ import {useTokens} from '@/general/hooks/useToken.ts'
 
 
 export default function RegisterPage() {
-    const { phoneNumber } = usePhoneNumber({redirectOnMissing: false})
+    const { phoneNumber } = usePhoneNumber({redirectOnMissing: true})
     const navigate = useNavigate()
     const {register} = useAuth()
     const { handleSubmit, control, formState } = useForm<registerInterface>({
