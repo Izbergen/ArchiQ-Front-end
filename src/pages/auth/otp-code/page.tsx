@@ -1,52 +1,66 @@
 import {Field, Flex, Text } from "@chakra-ui/react";
 
-import {PinInput} from "./../_general/components/PinInput.tsx";
 import {Button} from "@/general/components/ui/Button";
 
 
-import {COLORS, FONTS} from "@/general/constants";
+import {COLORS } from "@/general/constants";
 import {useNavigate} from "react-router-dom";
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from "react-hook-form"
+
 import {otpSchema ,otpInterface} from './../_general/schems.ts'
+import {useAuth, usePhoneNumber} from "./../_general/hooks.ts";
+
+import {toaster} from "@/general/components/ui/toaster.ts";
+import {FlexColumn, PinInput} from "@/pages/auth/_general/components";
 
 
 
+const normalizeData = (data: otpInterface) => {
+    return {
+        code: data.pin.reduce((prev, current) => prev + current),
+    }
+}
 
 export default function OTPCodePage() {
+    const { phoneNumber } = usePhoneNumber({redirectOnMissing: false})
+    const {verifyOTP, sendOTP , isCooldown , secondsLeft} = useAuth()
     const { handleSubmit, control, formState } = useForm<otpInterface>({
         resolver: zodResolver(otpSchema),
     })
-    const onSubmit = handleSubmit((data) => console.log(data))
+    const onSubmit = handleSubmit(async (data) => {
+        try {
+            const normalizedData = normalizeData(data);
+            if(!phoneNumber) throw new Error("Phone number is required");
 
-
+            const verified = await verifyOTP({
+                phoneNumber,
+                ...normalizedData
+            });
+            if(!verified) {
+                toaster.error("Otp Code Verification Error!.")
+            }
+            navigate('auth/register')
+        } catch (error) {
+            if(error instanceof Error){
+                toaster.error(error.message)
+            }
+        }
+    })
 
     const navigate = useNavigate();
+
     return (
-        <form onSubmit={onSubmit}>
-        <Flex
-            direction="column"
-            align="center"
-            justify="center"
-            p={4}
-        >
-            <Text
-                color={COLORS.primary}
-                fontFamily={FONTS.StyreneALC.BOLD}
-                fontSize="4xl"
-                mb="2"
-            >
+        <FlexColumn>
+            <Text color={COLORS.primary} mb="2" textStyle={'authTitle'}>
                 Введите код из СМС
             </Text>
-            <Text
-                color={COLORS.secondary}
-                fontFamily={FONTS.StyreneALC.REGULAR}
-                fontSize="xl"
-                mb="6"
-            >
+            <Text color={COLORS.secondary} mb="6" textStyle={'authSubTitle'}>
                 Мы отправили его на указанный вам номер
             </Text>
+
+            <form onSubmit={onSubmit}>
             <Field.Root invalid={!!formState.errors.pin} w={'275px'} mx="auto" mb='4'>
                 <Controller
                     control={control}
@@ -59,7 +73,7 @@ export default function OTPCodePage() {
                         />
                     )}
                 />
-                <Field.ErrorText fontFamily={FONTS.StyreneALC.BOLD} fontSize={'sm'}>{formState.errors.pin?.message}</Field.ErrorText>
+                <Field.ErrorText textStyle={'authFieldError'}>{formState.errors.pin?.message}</Field.ErrorText>
             </Field.Root>
 
 
@@ -68,8 +82,10 @@ export default function OTPCodePage() {
                 >
                     Продолжить
                 </Button>
-                <Button variant={'ghost'}>
-                    Отправить еще код. Осталось {}
+                <Button variant={'ghost'} type={'button'} disabled={isCooldown} onClick={async () => {
+                    if (phoneNumber) await sendOTP({phoneNumber})
+                }}>
+                    Отправить еще код. Осталось {secondsLeft}
                 </Button>
                 <Button variant={'ghost'}
                         onClick={() => navigate(-1)}
@@ -77,7 +93,7 @@ export default function OTPCodePage() {
                     Назад
                 </Button>
             </Flex>
-        </Flex>
-        </form>
+            </form>
+        </FlexColumn>
     );
 }
