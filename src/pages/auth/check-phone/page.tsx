@@ -1,16 +1,19 @@
+
 import {Flex, Text, Field} from "@chakra-ui/react";
 import {Button} from "@/general/components/ui/Button"
 
-import { COLORS, FONTS} from "@/general/constants";
+import { COLORS } from "@/general/constants";
 
 import {useNavigate} from "react-router-dom";
 import {useForm, Controller} from "react-hook-form";
 
+import {AxiosError} from "axios";
 import {zodResolver} from "@hookform/resolvers/zod";
 
-import {useAuth} from "./../_general/hooks.ts";
+import {useAuth, usePhoneNumber} from "./../_general/hooks.ts";
 import {FlexColumn, PhoneInput} from "./../_general/components";
 import {checkPhoneInterface, checkPhoneSchema} from "@/pages/auth/_general/schems.ts";
+
 
 
 const normalizeData = (data: checkPhoneInterface): checkPhoneInterface => {
@@ -20,6 +23,7 @@ const normalizeData = (data: checkPhoneInterface): checkPhoneInterface => {
 }
 
 export default function CheckPhonePage() {
+    const {setPhoneNumber, clearPhoneNumber} = usePhoneNumber()
     const navigate = useNavigate();
     const { handleSubmit, control, formState } = useForm<checkPhoneInterface>({
         resolver: zodResolver(checkPhoneSchema),
@@ -28,14 +32,23 @@ export default function CheckPhonePage() {
 
     const onSubmit = handleSubmit(
         async (data) => {
-            const normalizedData = normalizeData(data);
-            const exist = await checkPhone(normalizedData);
-            if(exist) {
-                navigate("/auth/login");
+            try {
+                const normalizedData = normalizeData(data);
+                setPhoneNumber(normalizedData.phoneNumber);
+                const exist = await checkPhone(normalizedData)
+                if(exist) {
+                    navigate("/auth/login");
+                }
+                else{
+                    navigate('/auth/otp-code')
+                }
             }
-            else{
-                navigate('/auth/otp-code')
+            catch (error) {
+                if(error instanceof AxiosError) {
+                    clearPhoneNumber();
+                }
             }
+
         }
     )
 
@@ -60,7 +73,7 @@ export default function CheckPhonePage() {
                         />
                     )}
                 />
-               <Field.ErrorText fontFamily={FONTS.StyreneALC.BOLD} fontSize={'sm'}>{formState.errors.phoneNumber?.message}</Field.ErrorText>
+               <Field.ErrorText textStyle={'authFieldError'}>{formState.errors.phoneNumber?.message}</Field.ErrorText>
             </Field.Root>
 
             <Flex w={'400px'} gap={'2'} direction="column">

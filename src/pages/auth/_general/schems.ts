@@ -18,3 +18,20 @@ export const otpSchema = z.object({
 
 
 export type otpInterface = z.infer<typeof otpSchema>
+
+
+
+export const loginSchema = z.object({
+    password: z.string({required_error: "Нужно ввести пароль"}).min(1),
+})
+
+export type loginInterface = z.infer<typeof loginSchema>
+
+export const registerSchema = z.object({
+    firstName: z.string().min(1),
+    lastName: z.string().min(1),
+    password: z.string({required_error: "Нужно ввести пароль"}).min(1),
+    confirmPassword: z.string({required_error: ""})
+})
+
+export type registerInterface = z.infer<typeof registerSchema>

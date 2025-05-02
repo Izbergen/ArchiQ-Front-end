@@ -2,15 +2,18 @@ import { useDI } from "@/general/hooks/useDI";
 import { IAccountsService } from "@/pages/auth/_general/services/accounts";
 import { AuthTypes } from "@/pages/auth/_general/authModule";
 import { applyServiceMiddleware } from "@/general/utils/applyServiceMiddleware";
-import {phoneMiddleware, toasterMiddleware} from "./middlewares";
+import {toasterMiddleware} from "./middlewares";
 import { useCallback, useEffect, useRef, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+import {PHONE_KEY} from "@/pages/auth/_general/constants.ts";
 
 const COOLDOWN_SECONDS = 30;
 
 export const useAuth = () => {
     const accountService = useDI<IAccountsService>(AuthTypes.AccountService);
 
-    const service = applyServiceMiddleware(accountService, [phoneMiddleware, toasterMiddleware]);
+    const service = applyServiceMiddleware(accountService, [toasterMiddleware]);
 
     const [isCooldown, setIsCooldown] = useState(false);
     const [secondsLeft, setSecondsLeft] = useState(0);
@@ -71,3 +74,35 @@ export const useAuth = () => {
         secondsLeft
     };
 };
+
+
+export const usePhoneNumber = (options?: { redirectOnMissing?: boolean }) => {
+    const [phoneNumber, setPhoneNumberState] = useState<string | null>(null);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const storedPhone = localStorage.getItem(PHONE_KEY);
+        setPhoneNumberState(storedPhone);
+
+        if (options?.redirectOnMissing && !storedPhone) {
+            navigate("/auth");
+        }
+    }, []);
+
+    const setPhoneNumber = (phone: string) => {
+        localStorage.setItem(PHONE_KEY, phone);
+        setPhoneNumberState(phone);
+    };
+
+    const clearPhoneNumber = () => {
+        localStorage.removeItem(PHONE_KEY);
+        setPhoneNumberState(null);
+    };
+
+    return {
+        phoneNumber,
+        setPhoneNumber,
+        clearPhoneNumber,
+    };
+};
+

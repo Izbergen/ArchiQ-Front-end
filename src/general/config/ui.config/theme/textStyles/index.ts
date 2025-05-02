@@ -40,6 +40,27 @@ export const coreTextStyles = defineTextStyles({
             fontSize: "xl"
         }
     },
+    authFieldError: {
+        value: {
+            fontFamily: FONTS.StyreneALC.BOLD,
+            fontSize: 'sm'
+        }
+    },
+    authField: {
+        value: {
+            fontSize: "sm",
+            lineHeight: "20px",
+            letterSpacing: "0%",
+        }
+    },
+    authFieldLabel: {
+        value: {
+            fontFamily: FONTS.StyreneALC.MEDIUM,
+            fontSize: 'md',
+            lineHeight: '100%',
+            letterSpacing: '0%',
+        }
+    }
 
 
 })

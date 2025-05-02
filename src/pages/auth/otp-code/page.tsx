@@ -1,61 +1,56 @@
-import {useEffect} from "react";
 import {Field, Flex, Text } from "@chakra-ui/react";
 
-import {PinInput} from "./../_general/components/PinInput.tsx";
 import {Button} from "@/general/components/ui/Button";
 
 
-import {COLORS, FONTS} from "@/general/constants";
+import {COLORS } from "@/general/constants";
 import {useNavigate} from "react-router-dom";
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from "react-hook-form"
 
 import {otpSchema ,otpInterface} from './../_general/schems.ts'
-import {useAuth} from "./../_general/hooks.ts";
-import {PHONE_KEY} from "./../_general/constants.ts";
-import {VerifyOTPProps} from "./../_general/services/accounts";
+import {useAuth, usePhoneNumber} from "./../_general/hooks.ts";
 
 import {toaster} from "@/general/components/ui/toaster.ts";
-import {FlexColumn} from "./../_general/components/FlexColumn.tsx";
+import {FlexColumn, PinInput} from "@/pages/auth/_general/components";
 
 
 
-const normalizeData = (data: otpInterface): VerifyOTPProps | null => {
-    const phoneNumber = localStorage.getItem(PHONE_KEY)
-    if(!phoneNumber) return null;
+const normalizeData = (data: otpInterface) => {
     return {
         code: data.pin.reduce((prev, current) => prev + current),
-        phoneNumber,
     }
 }
 
 export default function OTPCodePage() {
-    const phoneNumber = localStorage.getItem(PHONE_KEY)
+    const { phoneNumber } = usePhoneNumber({redirectOnMissing: false})
     const {verifyOTP, sendOTP , isCooldown , secondsLeft} = useAuth()
     const { handleSubmit, control, formState } = useForm<otpInterface>({
         resolver: zodResolver(otpSchema),
     })
     const onSubmit = handleSubmit(async (data) => {
-        const normalizedData = normalizeData(data);
-        if(!normalizedData) return null;
-        const verified = await verifyOTP(normalizedData);
-        if(!verified) {
-            toaster.error("Otp Code Verification.")
+        try {
+            const normalizedData = normalizeData(data);
+            if(!phoneNumber) throw new Error("Phone number is required");
+
+            const verified = await verifyOTP({
+                phoneNumber,
+                ...normalizedData
+            });
+            if(!verified) {
+                toaster.error("Otp Code Verification Error!.")
+            }
+            navigate('auth/register')
+        } catch (error) {
+            if(error instanceof Error){
+                toaster.error(error.message)
+            }
         }
-        navigate('auth/register')
     })
 
-    useEffect(() => {
-        if(!phoneNumber){
-            toaster.warning("Phone number doesn't exist.")
-        }
-    },[])
-
-
-
-
     const navigate = useNavigate();
+
     return (
         <FlexColumn>
             <Text color={COLORS.primary} mb="2" textStyle={'authTitle'}>
@@ -78,7 +73,7 @@ export default function OTPCodePage() {
                         />
                     )}
                 />
-                <Field.ErrorText fontFamily={FONTS.StyreneALC.BOLD} fontSize={'sm'}>{formState.errors.pin?.message}</Field.ErrorText>
+                <Field.ErrorText textStyle={'authFieldError'}>{formState.errors.pin?.message}</Field.ErrorText>
             </Field.Root>
 
 

@@ -9,4 +9,10 @@ services:
     env_file:
       - .env
     ports:
-      - "${PORT}:${PORT}"
+      - "8080:8080"
+    networks:
+      - archiq_backend_default
+
+networks:
+  archiq_backend_default:
+    external: true
