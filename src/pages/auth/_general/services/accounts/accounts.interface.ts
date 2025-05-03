@@ -27,11 +27,15 @@ export type VerifyOTPProps = {
     phoneNumber: string;
     code: string;
 }
+export type VerifyOTPResponse = {
+    success: boolean,
+    message: string
+}
 
 export interface IAccountsService {
     checkPhone(props: CheckPhoneProps): Promise<boolean>;
     login(props : LoginProps): Promise<TokenPair>;
     register(props : RegisterProps): Promise<TokenPair>;
     sendOTP(props: SendOTPProps): Promise<SendOTPResponse>;
-    verifyOTP(props: VerifyOTPProps): Promise<boolean>;
+    verifyOTP(props: VerifyOTPProps): Promise<VerifyOTPResponse>;
 }
