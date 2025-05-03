@@ -74,7 +74,7 @@ export class AccountsService implements IAccountsService {
             SendOTPResponse,
             KeysToSnakeCase<SendOTPProps>>
         (
-            this.apiConstants.URLS.ACCOUNTS.VERIFY_OTP,
+            this.apiConstants.URLS.ACCOUNTS.SEND_OTP,
             {
                 phone_number: phoneNumber,
                 ...props
