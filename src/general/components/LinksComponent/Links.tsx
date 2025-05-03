@@ -9,14 +9,17 @@ type SubtitleItem = {
 interface SubtitlesProps {
     title: string
     items?: SubtitleItem[]
+    fontSize?: string | number
+    subFontSize?: string | number
+    gap?: number | string
 }
 
-export const LinksComponent: React.FC<SubtitlesProps> = ({ title, items }) => (
+export const LinksComponent: React.FC<SubtitlesProps> = ({ title, items, fontSize='36px', subFontSize="20px", gap=2 }) => (
     <Box as="section">
-        <Text as="h2" textStyle="StyreneALCBold" color={'#52A0FF'} fontSize="36px" mb={4}>
+        <Text as="h2" textStyle="StyreneALCBold" color={'#52A0FF'} fontSize={fontSize} >
             {title}
         </Text>
-        <VStack align="start" gap={2}>
+        <VStack align="start" gap={gap}>
             {items?.map(({ subtitle, link }, i) =>
                 link ? (
                     <Link
@@ -30,7 +33,7 @@ export const LinksComponent: React.FC<SubtitlesProps> = ({ title, items }) => (
                         {subtitle}
                     </Link>
                 ) : (
-                    <Text key={i}  color={'#181818'} fontStyle="StyreneALCRegular" fontSize="20px">
+                    <Text key={i}  color={'#181818'} fontStyle="StyreneALCRegular" fontSize={subFontSize}>
                         {subtitle}
                     </Text>
                 )

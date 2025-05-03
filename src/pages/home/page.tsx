@@ -113,7 +113,7 @@ export default function HomePage() {
                 />
 
             </Flex>
-            <Flex gap={'20px'} py={'21px'}  >
+            <Flex gap={'20px'} pt={'21px'} pb={"92px"}  >
                 <InfoCard title="2025" subtitle="Company creation year"/>
                 <InfoCard title="650 000 м²" subtitle="Overall covered area"/>
                 <InfoCard title="100 projects" subtitle="Were finished by us"/>

@@ -15,7 +15,7 @@ interface Props {
 }
 const Header:React.FC<Props> = ({project}) => {
     return (
-        <HStack justify="space-between">
+        <HStack justify="space-between" pb={"34px"}>
             <HStack gap={"50px"}>
                 <Heading
                     fontFamily={FONTS.StyreneALC.BOLD}

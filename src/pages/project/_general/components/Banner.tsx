@@ -9,9 +9,10 @@ interface Props {
     children?: React.ReactNode;
     url?: string;
 }
-export default function Banner({height = '553px', width = "1600px", children, url}: Props) {
+export default function Banner({height = '553px', url}: Props) {
     return (
         <Flex
+            borderRadius="25px"
             height={height}
             position="relative"
             backgroundPosition="top center"
@@ -19,6 +20,7 @@ export default function Banner({height = '553px', width = "1600px", children, ur
             backgroundSize="cover"
             backgroundImage={`url(${url})`}
             _before={{
+                borderRadius: "25px",
                 content: '""',
                 position: 'absolute',
                 top: 0,
@@ -58,7 +60,7 @@ export default function Banner({height = '553px', width = "1600px", children, ur
                     <VStack>
                         <Link
                             marginTop="auto"
-                            href="/slide"
+                            href=""
                             color="white"
                             textDecoration="none"
                             _hover={{ textDecoration: 'underline' }}
