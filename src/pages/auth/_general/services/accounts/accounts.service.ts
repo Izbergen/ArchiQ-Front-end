@@ -20,6 +20,11 @@ type CheckPhoneResponse = {
     exists:	boolean,
     next: 'register' | 'login'
 }
+type UnnormalizedTokenPair = {
+    refresh: string,
+    access: string
+}
+
 
 type PasswordPair = {
     password: string
@@ -47,23 +52,25 @@ export class AccountsService implements IAccountsService {
     }
     async login({phoneNumber, ...props}: LoginProps): Promise<TokenPair> {
         const response = await this.axiosService.post<
-            any,
+            UnnormalizedTokenPair,
             KeysToSnakeCase<LoginProps>>
         (
             this.apiConstants.URLS.ACCOUNTS.LOGIN,
             {phone_number: phoneNumber, ...props,}
         )
-        return mapTokens(response.data);
+        return mapTokens(response);
 
     }
     async register({phoneNumber, password, confirmPassword , lastName , firstName} : RegisterProps): Promise<TokenPair> {
-        return await this.axiosService.post<TokenPair,KeysToSnakeCase<RegisterResponse>>(this.apiConstants.URLS.ACCOUNTS.REGISTER, {
+        const response = await this.axiosService.post<UnnormalizedTokenPair ,KeysToSnakeCase<RegisterResponse>>(this.apiConstants.URLS.ACCOUNTS.REGISTER, {
             phone_number: phoneNumber,
             password: password,
             password2: confirmPassword,
             last_name: lastName,
             first_name: firstName,
         })
+
+        return mapTokens(response);
     }
     async sendOTP({phoneNumber , ...props} : SendOTPProps): Promise<SendOTPResponse> {
         return await this.axiosService.post<
