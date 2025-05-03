@@ -22,10 +22,10 @@ type CheckPhoneResponse = {
 }
 
 type PasswordPair = {
-    password1: string
+    password: string
     password2: string
 }
-type RegisterResponse = Omit<RegisterProps & PasswordPair, 'password'| 'confirmPassword'>
+type RegisterResponse = Omit<RegisterProps, 'password'| 'confirmPassword' > & PasswordPair
 
 
 @injectable()
@@ -59,7 +59,7 @@ export class AccountsService implements IAccountsService {
     async register({phoneNumber, password, confirmPassword , lastName , firstName} : RegisterProps): Promise<TokenPair> {
         return await this.axiosService.post<TokenPair,KeysToSnakeCase<RegisterResponse>>(this.apiConstants.URLS.ACCOUNTS.REGISTER, {
             phone_number: phoneNumber,
-            password1: password,
+            password: password,
             password2: confirmPassword,
             last_name: lastName,
             first_name: firstName,
