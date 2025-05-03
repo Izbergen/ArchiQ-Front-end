@@ -1,3 +1,4 @@
+import {useEffect, useState} from 'react'
 import {Field, Flex, Text } from "@chakra-ui/react";
 
 import {Button} from "@/general/components/ui/Button";
@@ -29,6 +30,26 @@ export default function OTPCodePage() {
     const { handleSubmit, control, formState } = useForm<otpInterface>({
         resolver: zodResolver(otpSchema),
     })
+
+    const [hasSent, setHasSent] = useState(false);
+
+    useEffect(() => {
+
+        if (phoneNumber && !hasSent) {
+            sendOTP({ phoneNumber })
+                .then(result => {
+                    if (!result.success) {
+                        toaster.error(result.message || "Не удалось отправить код");
+                    }
+                    setHasSent(true);
+                })
+                .catch(err => {
+                    toaster.error(err.message || "Ошибка при отправке кода");
+                    setHasSent(true);
+                });
+        }
+    }, [phoneNumber, hasSent, sendOTP]);
+
     const onSubmit = handleSubmit(async (data) => {
         try {
             const normalizedData = normalizeData(data);
