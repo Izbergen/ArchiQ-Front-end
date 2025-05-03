@@ -7,11 +7,11 @@ const API_TOKEN = Object.freeze({
 })
 
 const ACCOUNTS = Object.freeze({
-    CHECK_PHONE: 'accounts/check-phone',
-    LOGIN: 'accounts/login',
-    REGISTER: 'accounts/register',
-    SEND_OTP: 'accounts/send-otp',
-    VERIFY_OTP: 'accounts/verify-otp',
+    CHECK_PHONE: 'accounts/check-phone/',
+    LOGIN: 'accounts/login/',
+    REGISTER: 'accounts/register/',
+    SEND_OTP: 'accounts/send-otp/',
+    VERIFY_OTP: 'accounts/verify-otp/',
 })
 
 export const API = {
