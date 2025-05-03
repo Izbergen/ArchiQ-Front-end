@@ -5,7 +5,7 @@ import {
     LoginProps,
     RegisterProps,
     SendOTPProps, SendOTPResponse,
-    VerifyOTPProps
+    VerifyOTPProps, VerifyOTPResponse
 } from "./accounts.interface";
 import { TokenPair } from "@/general/types/auth.types";
 
@@ -21,10 +21,6 @@ type CheckPhoneResponse = {
     next: 'register' | 'login'
 }
 
-type VerifyOTPResponse = {
-    verified: boolean,
-    message: string
-}
 type PasswordPair = {
     password1: string
     password2: string
@@ -82,7 +78,7 @@ export class AccountsService implements IAccountsService {
         )
 
     }
-    async verifyOTP({phoneNumber , ...props}: VerifyOTPProps): Promise<boolean> {
+    async verifyOTP({phoneNumber , ...props}: VerifyOTPProps): Promise<VerifyOTPResponse> {
         const response = await this.axiosService.post<
             VerifyOTPResponse,
             KeysToSnakeCase<VerifyOTPProps>>
@@ -93,6 +89,8 @@ export class AccountsService implements IAccountsService {
                     ...props
             }
         )
-        return response.verified
+        return {
+            ...response
+        }
     }
 }
