@@ -1,8 +1,8 @@
 import { forwardRef, useImperativeHandle, useRef, useEffect } from "react";
-import { Input, InputProps } from "@chakra-ui/react";
+import {  InputProps } from "@chakra-ui/react";
 import { withMask } from "use-mask-input";
 import { FONTS } from "@/general/constants";
-
+import {Input} from "@/general/components/ui/Input/Input.tsx"
 export const PhoneInput = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -19,8 +19,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, InputProps>((props, ref) 
             ref={inputRef}
             w="100%"
             placeholder="+7 776-148-70-88"
-            border="none"
-            outline="none"
             fontFamily={FONTS.StyreneALC.REGULAR}
             fontSize="2xl"
             {...props}
