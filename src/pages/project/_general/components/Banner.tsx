@@ -9,7 +9,7 @@ interface Props {
     children?: React.ReactNode;
     url?: string;
 }
-export default function Banner({height = '553px', width = "1600px", children, url}: Props) {
+export default function Banner({height = '553px', url}: Props) {
     return (
         <Flex
             height={height}
