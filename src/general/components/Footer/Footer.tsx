@@ -6,7 +6,7 @@ import {Container} from "@/general/components/ui/Container/Container.tsx";
 const Footer: React.FC = () => {
     const Projects = [
         { subtitle: 'All projects', link: '/allprojects' },
-        { subtitle: 'Apartments',   link: '/apartments'   },
+        { subtitle: 'apartments',   link: '/apartments'   },
         { subtitle: 'Parking',      link: '/parking'      },
         { subtitle: 'Boxrooms',     link: '/boxrooms'     },
         { subtitle: 'Commerce',     link: '/commerce'     },

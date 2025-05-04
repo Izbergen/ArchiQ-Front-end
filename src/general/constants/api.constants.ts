@@ -6,7 +6,7 @@ const API_TOKEN = Object.freeze({
     VERIFY_TOKEN: 'api/token/verify/'
 })
 const BANNERS = Object.freeze({
-    BANNERS: "banners/"
+    BANNERS: "/banners/"
 })
 const ACCOUNTS = Object.freeze({
     CHECK_PHONE: 'accounts/check-phone/',
