@@ -4,13 +4,14 @@ import {Suspense} from "react";
 import {ILoggerService} from "@/general/services/logger";
 // import Carousel from "./components/ChakraCarousel.tsx";
 import {lazy} from "react";
-import {Flex, Text, Heading, HStack, Skeleton, VStack, Link} from "@chakra-ui/react";
+import {Flex, Text, Heading, HStack, Skeleton, VStack, Link, Grid} from "@chakra-ui/react";
 import InfoCard from "@/general/components/InfoCard/InfoCard.tsx";
 import SingleBanner from "@/general/components/SingleBanner/SingleBanner.tsx";
 import {LuArrowUpRight} from "react-icons/lu";
 import SDUPNG from '@/general/assets/colors/sdu.png'
 import {Container} from "@/general/components/ui/Container/Container.tsx";
 import {FONTS} from "@/general/constants";
+import ResidentialComplex from "@/general/components/ResidentialComplex"
 import QuestionCard  from "@/general/components/QuestionCard/QuestionCard.tsx"
 const Carousel = lazy(() => import('./_components/ChakraCarousel.tsx'));
 
@@ -99,7 +100,13 @@ export default function HomePage() {
                     <InfoCard title="Stability" subtitle="All crew jumped, Nothing happened"/>
                     <InfoCard title="Installments" subtitle="50% and your three generations of debtors"/>
                 </Flex>
-
+            <Skeleton height="126px" py={'16px'}/>
+            <Skeleton width="511px" height="21px" pb={"21px"}/>
+            <Grid templateColumns="repeat(2, 1fr)" py='16px' gap={"20px"}>
+                <ResidentialComplex/>
+                <ResidentialComplex/>
+                <ResidentialComplex/>
+            </Grid>
             <Flex justifyContent="center" py="21px" direction={'column'} alignItems={'start'}>
                 <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'48px'} pb={'48px'}>
                     About us
