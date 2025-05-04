@@ -5,9 +5,10 @@ export const buttonRecipe = defineRecipe({
     base: {
         borderRadius: "15px",
         fontFamily: FONTS.StyreneALC.MEDIUM,
-        py: '10px',
+        py: "10px",
+        px: "10px",
         transition: "background 0.3s ease-in-out",
-        fontSize: 'xl'
+        fontSize: "xl",
     },
     variants: {
         variant: {

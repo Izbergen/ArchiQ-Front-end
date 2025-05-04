@@ -4,6 +4,9 @@ import {useState, useEffect} from "react";
 import {useDI} from "@/general/hooks/useDI.ts";
 import {IAxiosService} from "@/general/services/axios";
 import {CoreTypes} from "@/general/di/modules/core";
+import { Flex } from "@chakra-ui/react";
+import ResidenceComplexFilter from "./Filter";
+
 
 export default function Module() {
     const [residences , setResidences] = useState<IResidence[]>([]);
@@ -20,6 +23,10 @@ export default function Module() {
 
     }, [])
     return (
-        <ResidenceComplexList residences={residences} />
+        <Flex gap={'3'} direction={'column'}>
+            <ResidenceComplexFilter />
+            <ResidenceComplexList residences={residences} />
+        </Flex>
+        
     )
 }

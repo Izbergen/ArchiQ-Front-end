@@ -46,8 +46,7 @@ export default function HomePage() {
                     <InfoCard title="Stability" subtitle="All crew jumped, Nothing happened"/>
                     <InfoCard title="Installments" subtitle="50% and your three generations of debtors"/>
                 </Flex>
-            <Skeleton height="126px" py={'16px'}/>
-            <Skeleton width="511px" height="21px" pb={"21px"}/>
+            
             <ProjectsModule />
             <Flex justifyContent="center" py="21px" direction={'column'} alignItems={'start'}>
                 <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'48px'} pb={'48px'}>

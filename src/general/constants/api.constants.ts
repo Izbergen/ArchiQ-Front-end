@@ -8,6 +8,11 @@ const API_TOKEN = Object.freeze({
 const BANNERS = Object.freeze({
     BANNERS: "banners/"
 })
+const CITIES = 'cities/'
+const DISTRICTS = 'districts/'
+const PROPERTIES = 'properties/'
+
+
 const ACCOUNTS = Object.freeze({
     CHECK_PHONE: 'accounts/check-phone/',
     LOGIN: 'accounts/login/',
@@ -23,6 +28,9 @@ export const API = {
         API_TOKEN,
         ACCOUNTS,
         BANNERS,
+        CITIES,
+        PROPERTIES,
+        DISTRICTS
     }
 } as const;
 
