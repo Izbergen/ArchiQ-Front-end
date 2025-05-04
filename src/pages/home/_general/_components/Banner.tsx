@@ -1,26 +1,20 @@
-import React from 'react';
 import {Container} from "@/general/components/ui/Container/Container.tsx";
-import {Flex, Heading, HStack, Link, Text, VStack} from "@chakra-ui/react";
+import { Flex, Heading, HStack, Link, Text, VStack} from "@chakra-ui/react";
 import {LuArrowUpRight} from "react-icons/lu";
-
-interface Props {
-    height?: string | number;
-    width?: string | number;
-    children?: React.ReactNode;
-    url?: string;
-}
-export default function Banner({height = '553px', url}: Props) {
+import {IBanner} from "../types.ts"
+import React from "react";
+type BannerProps = IBanner
+export const Banner: React.FC<BannerProps> = ({id, title, subtitle, target_link, image_link} : BannerProps) => {
     return (
         <Flex
-            borderRadius="25px"
-            height={height}
+            key={id}
+            height="720px"
             position="relative"
             backgroundPosition="top center"
             backgroundRepeat="no-repeat"
             backgroundSize="cover"
-            backgroundImage={`url(${url})`}
+            backgroundImage={`url(${image_link})`}
             _before={{
-                borderRadius: "25px",
                 content: '""',
                 position: 'absolute',
                 top: 0,
@@ -51,16 +45,16 @@ export default function Banner({height = '553px', url}: Props) {
                             mb={2}
                             color="white"
                         >
-                            SDU Residence
+                            {title}
                         </Heading>
                         <Text textStyle="StyreneALCMiddle" fontSize="24px" color="white">
-                            Great place to start modern life
+                            {subtitle}
                         </Text>
                     </VStack>
                     <VStack>
                         <Link
                             marginTop="auto"
-                            href=""
+                            href={target_link}
                             color="white"
                             textDecoration="none"
                             _hover={{ textDecoration: 'underline' }}
@@ -73,5 +67,5 @@ export default function Banner({height = '553px', url}: Props) {
             </Container>
         </Flex>
     );
-}
+};
 

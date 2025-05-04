@@ -5,7 +5,7 @@ import {Box, useBreakpointValue} from '@chakra-ui/react'
 import { LuChevronRight , LuChevronLeft } from "react-icons/lu";
 import Slider, {Settings} from 'react-slick'
 
-import CarouselArrowButton from './CarouselArrowButton';
+import CarouselArrowButton from './CarouselArrowButton.tsx';
 
 interface CarouselProps {
   height?: string | number;

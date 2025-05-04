@@ -12,7 +12,7 @@ import React from "react";
 import {PhoneInput} from "@/pages/auth/_general/components";
 import {Container} from "@/general/components/ui/Container/Container";
 const QuestionCard: React.FC = () => (
-    <Container py={"82px"}>
+    <Container>
 
         <Box
 
