@@ -16,6 +16,7 @@ const ACCOUNTS = Object.freeze({
     VERIFY_OTP: 'accounts/verify-otp/',
 })
 
+
 export const API = {
     BASE_URL: API_URL,
     URLS: {
