@@ -1,0 +1,38 @@
+name: Deploy Frontend ArchiQ
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up SSH agent
+        uses: tanmancan/action-setup-ssh-agent-key@1.0.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -t rsa -H ${{ secrets.VPS_HOST }} >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Check SSH connectivity
+        run: |
+          ssh -T ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} echo "SSH OK"
+
+      - name: Deploy to production
+        if: github.ref == 'refs/heads/main'
+        run: |
+          ssh -T ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} << 'EOF'
+            cd /opt/archiq/ArchiQ-Front-end
+            git pull --rebase origin main
+            docker compose -f docker-compose.yml up --detach --build
+          EOF
