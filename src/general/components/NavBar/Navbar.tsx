@@ -3,7 +3,6 @@ import {
     Flex,
     HStack,
     Link,
-    Text,
 } from "@chakra-ui/react";
 import {Container} from "@/general/components/ui/Container/Container.tsx";
 
@@ -16,7 +15,7 @@ const productList = [
 ];
 
 const utilList = [
-    {text: "About company", href: "/about"},
+    {text: "About company", href: "/aboutUs"},
     {text: "Contacts", href: "/contacts"},
     {text: "Ai-assistant", href: "/ai-assistant"}
 
@@ -43,9 +42,9 @@ const Navbar = () => {
                 <Flex alignItems="center" justify="space-between">
                     {/* Center LinksComponent.tsx */}
                     <HStack gap={'20px'}>
-                        <Text textStyle="StyreneALCBold" fontSize="48px" px={'25px'}>
+                        <Link href={'/'} textStyle="StyreneALCBold" fontSize="48px" px={'25px'}>
                             AQ
-                        </Text>
+                        </Link>
                         {productList.map((item) => (
                             <Link
                                 key={item.href}
@@ -83,7 +82,7 @@ const Navbar = () => {
                         />
 
                         <Link
-                            href="/public"
+                            href="/auth"
                             textStyle="StyreneALCBold"
                             fontSize="16px"
                             _hover={{ textDecoration: "none", color: "blue.600" }}
