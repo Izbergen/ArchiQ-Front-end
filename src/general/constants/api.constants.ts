@@ -5,7 +5,9 @@ const API_TOKEN = Object.freeze({
     REFRESH_TOKEN: 'api/token/refresh/',
     VERIFY_TOKEN: 'api/token/verify/'
 })
-
+const BANNERS = Object.freeze({
+    BANNERS: "banners/"
+})
 const ACCOUNTS = Object.freeze({
     CHECK_PHONE: 'accounts/check-phone/',
     LOGIN: 'accounts/login/',
@@ -18,7 +20,8 @@ export const API = {
     BASE_URL: API_URL,
     URLS: {
         API_TOKEN,
-        ACCOUNTS
+        ACCOUNTS,
+        BANNERS,
     }
 } as const;
 

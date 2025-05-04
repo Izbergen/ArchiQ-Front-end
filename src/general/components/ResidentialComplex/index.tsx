@@ -4,12 +4,12 @@ import SDUPNG from "@/general/assets/colors/sdu.png"
 import { LuArrowUpRight } from "react-icons/lu";
 
 interface ResidenceProps {
-    id: string;
-    name: string;
-    class_type: string;
-    down_payment: number | string;
-    total_apartment: number | string;
-    photo_link: string;
+    id?: string;
+    name?: string;
+    class_type?: string;
+    down_payment?: number | string;
+    total_apartment?: number | string;
+    photo_link?: string;
 
 }
 const ResidentialComplex: React.FC<ResidenceProps> = ({id="1", name= "SDU Residence", class_type= "COMFORT",down_payment= 50.0,total_apartment= 252 ,photo_link=SDUPNG,
