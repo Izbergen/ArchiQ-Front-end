@@ -2,12 +2,11 @@
 // import Carousel from "./components/ChakraCarousel.tsx";
 // import Banner from "@/pages/home/_general/_components/Banner.tsx";
 import {lazy, Suspense, useEffect, useState} from "react";
-import {Flex, Text, Heading,  Skeleton, Grid} from "@chakra-ui/react";
+import {Flex, Text, Heading,  Skeleton} from "@chakra-ui/react";
 import InfoCard from "@/general/components/InfoCard/InfoCard.tsx";
 import SingleBanner from "@/general/components/SingleBanner/SingleBanner.tsx";
 import {Container} from "@/general/components/ui/Container/Container.tsx";
 import {FONTS} from "@/general/constants";
-import ResidentialComplex from "@/general/components/ResidentialComplex"
 import QuestionCard  from "@/general/components/QuestionCard/QuestionCard.tsx"
 const Carousel = lazy(() => import('@/pages/home/_general/_components/ChakraCarousel.tsx'));
 import {CoreTypes} from "@/general/di/modules/core";
@@ -15,11 +14,11 @@ import {IBannerService} from "@/general/services/banner";
 import {useDI} from "@/general/hooks/useDI.ts";
 import {IBanner} from "@/pages/home/_general/types.ts";
 import {Banner} from "@/pages/home/_general/_components/Banner.tsx";
+import ProjectsModule from "@/modules/Projects";
 export default function HomePage() {
     const bannerService = useDI<IBannerService>(CoreTypes.BannerService);
     const [banners, setBanners] = useState<IBanner[]>([]);
 
-    // fetch _once_
     useEffect(() => {
         bannerService.getBanners()
             .then(setBanners)
@@ -49,11 +48,7 @@ export default function HomePage() {
                 </Flex>
             <Skeleton height="126px" py={'16px'}/>
             <Skeleton width="511px" height="21px" pb={"21px"}/>
-            <Grid templateColumns="repeat(2, 1fr)" py='16px' gap={"20px"}>
-                <ResidentialComplex/>
-                <ResidentialComplex/>
-                <ResidentialComplex/>
-            </Grid>
+            <ProjectsModule />
             <Flex justifyContent="center" py="21px" direction={'column'} alignItems={'start'}>
                 <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'48px'} pb={'48px'}>
                     About us
