@@ -4,11 +4,11 @@ import {SimpleGrid} from "@chakra-ui/react";
 
 type ResidenceListProps = { residences: IResidence[] }
 
-export default function ResidenceList({residences} : ResidenceListProps){
+export default function ResidenceComplexList({residences} : ResidenceListProps){
     return (
-        <SimpleGrid gap={20} templateColumns="repeat(2, 1fr)">
+        <SimpleGrid gap={20} templateColumns="repeat(3, 1fr)">
             {
-                residences.map((residence) => <ResidentialComplexCard {...residence} />)
+                residences.map((residence) => <ResidentialComplexCard key={residence.id} {...residence} />)
             }
         </SimpleGrid>
 
