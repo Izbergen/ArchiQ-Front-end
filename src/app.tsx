@@ -1,7 +1,7 @@
 import { use } from "react"
 import AppRouter from "./routes.tsx";
 
-import {StoreProvider} from "@/general/providers/store.provider.tsx";
+import {AppStoreContext, StoreProvider} from "@/general/providers/store.provider.tsx";
 
 import {createStore} from "@/general/store";
 import {DiProvider} from "@/general/providers/di.provider.tsx";
@@ -14,7 +14,7 @@ export default function App() {
   const rootContainer = use(containerPromise);
   return (
           <DiProvider container={rootContainer} >
-              <StoreProvider store={store}>
+              <StoreProvider store={store} Context={AppStoreContext}>
                   <AppRouter />
               </StoreProvider>
           </DiProvider>
