@@ -23,6 +23,7 @@ import {
     description_short,
     residential_complex_photos,
   }) => {
+   
     const formattedClass =
       class_type.charAt(0).toUpperCase() +
       class_type.slice(1).toLowerCase();
@@ -43,10 +44,7 @@ import {
       >
         <Box position="absolute" inset={0} zIndex={0}>
           <ImageSlider
-            photos={residential_complex_photos.map((p) => ({
-              id: p.id,
-              photo_link: p.photo_link,
-            }))}
+            photos={residential_complex_photos}
           />
           <Box
             position="absolute"

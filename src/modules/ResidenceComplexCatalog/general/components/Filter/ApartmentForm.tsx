@@ -2,7 +2,7 @@ import { Stack, Field, SimpleGrid, Button, Popover, Slider } from "@chakra-ui/re
 import { APARTMENT_CLASS, ROOMS } from "@/general/types/api.types";
 import { RadioCardItem, RadioCardRoot } from "./RadioCardItem";
 import { useForm, Controller } from "react-hook-form";
-import { useLocalStore } from "./../../hooks";
+import { useLocalStore } from "../../hooks";
 
 const MIN_AREA=40.35;
 const MAX_AREA=100;

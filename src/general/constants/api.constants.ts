@@ -11,6 +11,7 @@ const BANNERS = Object.freeze({
 const CITIES = 'cities/'
 const DISTRICTS = 'districts/'
 const PROPERTIES = 'properties/'
+const RESIDENTIAL_COMPLEXES = 'residential-complexes/'
 
 
 const ACCOUNTS = Object.freeze({
@@ -30,7 +31,8 @@ export const API = {
         BANNERS,
         CITIES,
         PROPERTIES,
-        DISTRICTS
+        DISTRICTS,
+        RESIDENTIAL_COMPLEXES
     }
 } as const;
 

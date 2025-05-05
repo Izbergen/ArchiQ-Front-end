@@ -1,6 +1,6 @@
 import { Stack, Field, Button, Popover, Slider } from "@chakra-ui/react"; // если используете Radix UI
 import { useForm, Controller } from "react-hook-form";
-import { useLocalStore } from "./../../hooks";
+import { useLocalStore } from "../../hooks";
 
 
 type FormValues = {

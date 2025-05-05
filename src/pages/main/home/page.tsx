@@ -8,13 +8,13 @@ import SingleBanner from "@/general/components/SingleBanner/SingleBanner.tsx";
 import {Container} from "@/general/components/ui/Container/Container.tsx";
 import {FONTS} from "@/general/constants";
 import QuestionCard  from "@/general/components/QuestionCard/QuestionCard.tsx"
-const Carousel = lazy(() => import('@/pages/home/_general/_components/ChakraCarousel.tsx'));
+const Carousel = lazy(() => import('./_general/_components/ChakraCarousel'));
 import {CoreTypes} from "@/general/di/modules/core";
 import {IBannerService} from "@/general/services/banner";
 import {useDI} from "@/general/hooks/useDI.ts";
-import {IBanner} from "@/pages/home/_general/types.ts";
-import {Banner} from "@/pages/home/_general/_components/Banner.tsx";
-import ProjectsModule from "@/modules/Projects";
+import {IBanner} from "./_general/types";
+import {Banner} from "./_general/_components/Banner";
+import ProjectsModule from "@/modules/ResidenceComplexCatalog";
 export default function HomePage() {
     const bannerService = useDI<IBannerService>(CoreTypes.BannerService);
     const [banners, setBanners] = useState<IBanner[]>([]);

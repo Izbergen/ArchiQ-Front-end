@@ -41,17 +41,21 @@ const ImageSlider: FC<ImageSliderProps> = ({photos, height = "385px", overlayOpa
             }}
         >
             <Slider {...settings}>
-                {photos.map(({ id, photo_link }) => (
-                    <Box key={id} height={height} width="100%" position="relative">
-                        <Image
-                            src={photo_link}
-                            alt={`slide-${id}`}
-                            objectFit="cover"
-                            width="100%"
-                            height={height}
-                        />
-                    </Box>
-                ))}
+                {photos.map(({ id, photo_link }) => {
+                    console.log(photo_link);
+                    console.log(id);
+                    return (
+                        <Box key={id} height={height} width="100%" position="relative">
+                            <Image
+                                src={photo_link}
+                                alt={`slide-${id}`}
+                                objectFit="cover"
+                                width="100%"
+                                height={height}
+                            />
+                        </Box>
+                    )
+                })}
             </Slider>
         </Box>
     );

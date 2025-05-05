@@ -8,7 +8,7 @@ import {
 import {Container} from "@/general/components/ui/Container/Container.tsx";
 
 const productList = [
-    {text: "All products" , href: "/products" },
+    {text: "All products" , href: "/residential-complexes" },
     {text: "Apartments" , href: "/apartments" },
     {text: "Parking" , href: "/parking" },
     {text: "Boxrooms", href: "/boxrooms" },

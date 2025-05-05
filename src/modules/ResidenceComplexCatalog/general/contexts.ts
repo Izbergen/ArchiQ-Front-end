@@ -1,4 +1,4 @@
-import {IModuleStore} from "@/modules/Projects/general/store.ts";
+import {IModuleStore} from "@/modules/ResidenceComplexCatalog/general/store";
 import {createContext} from 'react'
 import {StoreApi, UseBoundStore} from "zustand/index";
 

@@ -1,7 +1,7 @@
 import { Stack, Field, SimpleGrid, Button, Popover, Slider, Tabs } from "@chakra-ui/react";
 import { RadioCardItem, RadioCardRoot } from "./RadioCardItem";
 import { useForm, Controller } from "react-hook-form";
-import { useLocalStore } from "./../../hooks";
+import { useLocalStore } from "../../hooks";
 
 type CommercialTypes = "commercial" | "parking" | "storage";
 type FormValues = {

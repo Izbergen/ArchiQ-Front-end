@@ -1,6 +1,6 @@
 import {useStore} from "@/general/hooks/useStore.ts";
-import {ModuleStoreContext} from "@/modules/Projects/general/contexts.ts";
-import {IModuleStore} from "@/modules/Projects/general/store.ts";
+import {ModuleStoreContext} from "@/modules/ResidenceComplexCatalog/general/contexts";
+import {IModuleStore} from "@/modules/ResidenceComplexCatalog/general/store";
 
 export function useLocalStore<Selected>(
     selector: (state: IModuleStore) => Selected

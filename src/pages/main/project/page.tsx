@@ -1,9 +1,9 @@
 import Header from "./_general/components/header.tsx"
 import {Container} from "@/general/components/ui/Container/Container.tsx";
 import SDUPNG from '@/general/assets/colors/sdu.png'
-import Banner from "@/pages/project/_general/components/Banner.tsx";
-import AboutProject from "@/pages/project/_general/components/AboutProject.tsx";
-import ChakraCarousel from "@/pages/home/_general/_components/ChakraCarousel.tsx"
+import Banner from "@/pages/main/project/_general/components/Banner.tsx";
+import AboutProject from "@/pages/main/project/_general/components/AboutProject.tsx";
+import ChakraCarousel from "@/pages/main/home/_general/_components/ChakraCarousel.tsx"
 import {Box, Flex} from "@chakra-ui/react";
 import QuestionCard from "@/general/components/QuestionCard/QuestionCard.tsx";
 export default function ProjectPage() {

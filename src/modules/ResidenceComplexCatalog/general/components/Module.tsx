@@ -1,24 +1,26 @@
 import { IResidence } from "@/general/types/api.types";
-import ResidenceComplexList from "./List";
+import List from "./List";
 import {useEffect} from "react";
 import {useDI} from "@/general/hooks/useDI.ts";
 import {IAxiosService} from "@/general/services/axios";
 import {CoreTypes} from "@/general/di/modules/core";
 import { Flex } from "@chakra-ui/react";
-import ResidenceComplexFilter from "./Filter";
+import Filter from "./Filter";
 import { useGlobalStore } from "@/general/hooks/useStore";
+import { IAPI } from "@/general/constants/api.constants";
 
 
 export default function Module() {
     const setResidences = useGlobalStore((state) => state.setResidences)
     const residences = useGlobalStore((state) => state.residences)
     const axiosService = useDI<IAxiosService>(CoreTypes.AxiosService)
+    const apiConstants = useDI<IAPI>(CoreTypes.ApiConstants)
     useEffect(() => {
         (async() => {
             const response = await axiosService.get<{
                 results: IResidence[],
                 metadata: any
-            }>('residential-complexes/')
+            }>(apiConstants.URLS.RESIDENTIAL_COMPLEXES)
             setResidences(response.results)
         })()
 
@@ -26,8 +28,8 @@ export default function Module() {
     }, [])
     return (
         <Flex gap={'3'} direction={'column'}>
-            <ResidenceComplexFilter />
-            <ResidenceComplexList residences={residences} />
+            <Filter />
+            <List residences={residences} />
         </Flex>
         
     )

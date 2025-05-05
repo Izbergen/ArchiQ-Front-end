@@ -36,17 +36,7 @@ export default function Carousel({
   return (
     <Box display="flex" justifyContent="center" alignItems="center" height={height} width={width}>
       <Box position="relative" width={width} height={height}>
-        {/* CSS files for react-slick */}
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
-        />
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
-        />
+        
         <CarouselArrowButton
           ariaLabel="left-arrow"
           position="left"
