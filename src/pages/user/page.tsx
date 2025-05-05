@@ -1,24 +1,26 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
-  Box, 
-  Flex, 
-  Heading, 
-  Text, 
-  Button, 
-  HStack, 
+  Box,
+  Flex,
+  Heading,
+  Text,
+  Button,
+  HStack,
   VStack,
   Icon,
   Image,
+  Input,
+  Field,
+  Table,
+  Spinner,
 } from "@chakra-ui/react";
 import { FONTS } from "@/general/constants";
 import { useDI } from "@/general/hooks/useDI";
 import { CoreTypes } from "@/general/di/modules/core";
 import type { IAxiosService } from "@/general/services/axios";
-import { FaFile, FaFileAlt, FaQuestion } from "react-icons/fa";
+import { FaFile } from "react-icons/fa";
 import { toaster } from "@/general/components/ui/toaster";
-import { Property } from "@/general/types/property.types";
 
-// Types based on API schemas
 interface UserProfile {
   id: number;
   phone_number: string;
@@ -26,104 +28,55 @@ interface UserProfile {
   last_name: string;
 }
 
+interface Property {
+  id: number;
+  category: string;
+  number: number;
+  price: string;
+  price_per_sqm: string;
+  rental_price: string;
+  floor: number;
+  area: string;
+  rooms: number;
+  layout: string;
+  property_photos: { id: number; photo_link: string }[];
+  property_videos: { id: number; video_link: string }[];
+  block: {
+    id: number;
+    block_number: number;
+    entrance_number: number;
+    total_floors: number;
+    building_status: string;
+  };
+  complex: string;
+}
+
 const UserPage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const [editMode, setEditMode] = useState(false);
+  const [editData, setEditData] = useState<UserProfile | null>(null);
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const axiosService = useDI<IAxiosService>(CoreTypes.AxiosService);
-
-  // Add this useEffect to log when profile state changes
-  useEffect(() => {
-    console.log("Profile state updated:", profile);
-  }, [profile]);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
-        
-        // MOCK API calls - replace with real API URLs in production
-        // Profile API: /accounts/profile/
-        const profileResponse = await axiosService.get('/accounts/profile/');
-        if (profileResponse && typeof profileResponse === 'object' && 'data' in profileResponse) {
-          const userData = profileResponse.data as UserProfile;
-          console.log("API response data:", userData); // Log the API data directly
-          setProfile(userData);
+
+        const profileResponse = await axiosService.get<UserProfile>('/accounts/profile/');
+        if (profileResponse) {
+          setProfile(profileResponse);
+          setEditData(profileResponse);
         }
-        
-        // Properties API: /accounts/properties/
-        const propertiesResponse = await axiosService.get('/accounts/properties/');
-        if (propertiesResponse && typeof propertiesResponse === 'object' && 'data' in propertiesResponse) {
-          const propData = propertiesResponse.data as Property[];
-          setProperties(Array.isArray(propData) ? propData : []);
+
+        const propertiesResponse = await axiosService.get<Property[]>('/accounts/properties/');
+        if (propertiesResponse) {
+          setProperties(propertiesResponse);
         }
       } catch (error) {
         console.error('Error fetching user data:', error);
-        toaster.error("Error loading user data");
-        
-        // Set mock data for development/preview if API call fails
-        setProfile({
-          id: 1,
-          phone_number: "+77777777777",
-          first_name: "Alexa",
-          last_name: "Rawles",
-
-        });
-        
-        // Sample property data structure matching API schema
-        setProperties([
-          { 
-            id: 1, 
-            category: "APARTMENT", 
-            complex: { name: "Complex A" }, 
-            price: "25000000", 
-            price_per_sqm: "87917",
-            rental_price: "16",
-            floor: "5",
-            area: "60", 
-            rooms: "2", 
-            unit: "Unit 20", 
-            application_type: "Purchase", 
-            status: "In Process",
-            property_photos: [
-              { id: 1, photo_link: "https://randomuser.me/api/portraits/women/68.jpg" }
-            ]
-          },
-          { 
-            id: 2, 
-            category: "APARTMENT", 
-            complex: { name: "Complex A" }, 
-            price: "30000000", 
-            price_per_sqm: "87917",
-            rental_price: "16",
-            floor: "7",
-            area: "75", 
-            rooms: "3", 
-            unit: "Unit 20", 
-            application_type: "Purchase", 
-            status: "In Process",
-            property_photos: [
-              { id: 2, photo_link: "https://randomuser.me/api/portraits/women/69.jpg" }
-            ]
-          },
-          { 
-            id: 3, 
-            category: "APARTMENT", 
-            complex: { name: "Complex B" }, 
-            price: "20000000", 
-            price_per_sqm: "87917",
-            rental_price: "16",
-            floor: "3",
-            area: "55", 
-            rooms: "1", 
-            unit: "Unit 20", 
-            application_type: "Purchase", 
-            status: "In Process",
-            property_photos: [
-              { id: 3, photo_link: "https://randomuser.me/api/portraits/women/70.jpg" }
-            ]
-          }
-        ]);
+        toaster.error("Error loading profile data");
       } finally {
         setLoading(false);
       }
@@ -132,172 +85,172 @@ const UserPage = () => {
     fetchUserData();
   }, []);
 
+  const handleEditClick = () => {
+    setEditMode(true);
+  };
+
+  const handleSave = async () => {
+    if (!editData) return;
+    try {
+      await axiosService.patch('/accounts/profile/', {
+        phone_number: editData.phone_number,
+        first_name: editData.first_name,
+        last_name: editData.last_name,
+      });
+      setProfile(editData);
+      setEditMode(false);
+      toaster.success("Profile updated successfully!");
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toaster.error("Failed to update profile");
+    }
+  };
+
+  const handleChange = (field: keyof UserProfile, value: string) => {
+    if (!editData) return;
+    setEditData({
+      ...editData,
+      [field]: value,
+    });
+  };
+
+  if (loading) {
+    return (
+        <Flex align="center" justify="center" minH="100vh">
+          <Spinner size="xl" />
+        </Flex>
+    );
+  }
+
   return (
-    <Flex justify="center" align="center" py={8} px={4}>
-      <Box
-        bg="white"
-        borderRadius="2xl"
-        boxShadow="md"
-        w="full"
-        maxW="1200px"
-      >
-        {/* User Profile Section */}
-        <Flex p={6} align="center" justify="space-between">
-          <Flex align="center">
-            <Image 
-              src="https://randomuser.me/api/portraits/women/68.jpg" 
-              borderRadius="full"
-              boxSize="60px"
-              mr={4}
-              alt="User profile"
-            />
-            <Box>
-              <Heading size="md" fontFamily={FONTS.StyreneALC.MEDIUM}>
-                {profile ? `${profile.first_name} ${profile.last_name}` : "Loading..."}
+      <Flex justify="center" py={8} px={4}>
+        <Box bg="white" borderRadius="2xl" boxShadow="md" w="full" maxW="1200px">
+          <Flex p={6} align="center" justify="space-between">
+            <Flex align="center">
+              <Box>
+                {editMode && editData ? (
+                    <>
+                      <Field.Root id="first_name" mb={2}>
+                        <Field.Label>First Name</Field.Label>
+                        <Input
+                            value={editData.first_name}
+                            onChange={(e) => handleChange("first_name", e.target.value)}
+                        />
+                      </Field.Root>
+                      <Field.Root id="last_name" mb={2}>
+                        <Field.Label>Last Name</Field.Label>
+                        <Input
+                            value={editData.last_name}
+                            onChange={(e) => handleChange("last_name", e.target.value)}
+                        />
+                      </Field.Root>
+                      <Field.Root id="phone_number" mb={2}>
+                        <Field.Label>Phone Number</Field.Label>
+                        <Input
+                            value={editData.phone_number}
+                            onChange={(e) => handleChange("phone_number", e.target.value)}
+                        />
+                      </Field.Root>
+                    </>
+                ) : (
+                    <>
+                      <Heading size="md" fontFamily={FONTS.StyreneALC.MEDIUM}>
+                        {profile ? `${profile.first_name} ${profile.last_name}` : "Loading..."}
+                      </Heading>
+                      <Text color="gray.600" fontSize="sm">
+                        {profile?.phone_number || ""}
+                      </Text>
+                    </>
+                )}
+              </Box>
+            </Flex>
+            {editMode ? (
+                <Button colorScheme="green" size="sm" borderRadius="md" onClick={handleSave}>
+                  Save
+                </Button>
+            ) : (
+                <Button colorScheme="blue" size="sm" borderRadius="md" onClick={handleEditClick}>
+                  Edit
+                </Button>
+            )}
+          </Flex>
+
+          <Flex>
+            <VStack
+                align="start"
+                width="200px"
+                p={6}
+                gap={4}
+                borderRightWidth="1px"
+                borderColor="gray.200"
+            >
+              <HStack color="#52A0FF" fontWeight="bold">
+                <Icon as={FaFile} />
+                <Text>My Properties</Text>
+              </HStack>
+            </VStack>
+
+            <Box flex="1" p={6}>
+              <Heading
+                  as="h2"
+                  size="lg"
+                  color="#52A0FF"
+                  mb={2}
+                  fontFamily={FONTS.StyreneALC.MEDIUM}
+              >
+                My Properties
               </Heading>
-              <Text color="gray.600" fontSize="sm">
-                {profile?.phone_number || "Loading..."}
+              <Text mb={6} fontSize="sm" color="gray.600">
+                Manage your properties, view details, and submit requests
               </Text>
+
+              {/* Properties Table */}
+              <Box overflowX="auto">
+                <Table.Root>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.ColumnHeader>Property</Table.ColumnHeader>
+                      <Table.ColumnHeader>Unit Number</Table.ColumnHeader>
+                      <Table.ColumnHeader>Floor</Table.ColumnHeader>
+                      <Table.ColumnHeader>Building Status</Table.ColumnHeader>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {properties.length > 0 ? (
+                        properties.map((property) => (
+                            <Table.Row key={property.id}>
+                              <Table.Cell>
+                                <Flex align="center">
+                                  <Image
+                                      src={property.property_photos?.[0]?.photo_link || "https://via.placeholder.com/60"}
+                                      borderRadius="md"
+                                      boxSize="40px"
+                                      objectFit="cover"
+                                      mr={3}
+                                      alt="Property"
+                                  />
+                                  {property.category}
+                                </Flex>
+                              </Table.Cell>
+                              <Table.Cell>{property.number}</Table.Cell>
+                              <Table.Cell>{property.floor}</Table.Cell>
+                              <Table.Cell>{property.block?.building_status || "N/A"}</Table.Cell>
+                            </Table.Row>
+                        ))
+                    ) : (
+                        <Table.Row>
+                          <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
+                            No properties found
+                          </Table.Cell>
+                        </Table.Row>
+                    )}
+                  </Table.Body>
+                </Table.Root>
+              </Box>
             </Box>
           </Flex>
-          <Button 
-            colorScheme="blue" 
-            size="sm" 
-            borderRadius="md"
-          >
-            Edit
-          </Button>
-        </Flex>
-
-        {/* Main Content with Sidebar */}
-        <Flex>
-          {/* Sidebar */}
-          <VStack 
-            align="start" 
-            width="200px" 
-            p={6} 
-            gap={4}
-            borderRightWidth="1px"
-            borderColor="gray.200"
-          >
-            <HStack color="#52A0FF" fontWeight="bold">
-              <Icon as={FaFile} />
-              <Text>Мои объекты</Text>
-            </HStack>
-            <HStack>
-              <Icon as={FaFileAlt} />
-              <Text>Мои заявки</Text>
-              <Box 
-                bg="#52A0FF" 
-                color="white" 
-                borderRadius="full" 
-                w="20px" 
-                h="20px" 
-                display="flex" 
-                alignItems="center" 
-                justifyContent="center"
-                fontSize="xs"
-              >
-                2
-              </Box>
-            </HStack>
-            <HStack>
-              <Icon as={FaQuestion} />
-              <Text>Проблемы жк</Text>
-              <Box 
-                bg="#52A0FF" 
-                color="white" 
-                borderRadius="full" 
-                w="20px" 
-                h="20px" 
-                display="flex" 
-                alignItems="center" 
-                justifyContent="center"
-                fontSize="xs"
-              >
-                25
-              </Box>
-            </HStack>
-          </VStack>
-
-          {/* Main Content */}
-          <Box flex="1" p={6}>
-            <Heading 
-              as="h2" 
-              size="lg" 
-              color="#52A0FF" 
-              mb={2}
-              fontFamily={FONTS.StyreneALC.MEDIUM}
-            >
-              Мои объекты
-            </Heading>
-            <Text mb={6} fontSize="sm" color="gray.600">
-              Manage your properties, view details, and submit requests
-            </Text>
-
-            {/* Properties Table - Simple version without Chakra UI Table components */}
-            <Box overflowX="auto">
-              <Box as="table" width="100%" style={{ borderCollapse: "collapse" }}>
-                <Box as="thead">
-                  <Box as="tr">
-                    <Box as="th" textAlign="left" p={3}>Property</Box>
-                    <Box as="th" textAlign="left" p={3}>Unit</Box>
-                    <Box as="th" textAlign="left" p={3}>Application</Box>
-                    <Box as="th" textAlign="left" p={3}>Status</Box>
-                  </Box>
-                </Box>
-                <Box as="tbody">
-                  {properties.length > 0 ? (
-                    properties.map((property) => (
-                      <Box as="tr" key={property.id}>
-                        <Box as="td" p={3}>
-                          {property.unit && (
-                            <Flex align="center">
-                              <Image 
-                                src={property.property_photos?.[0]?.photo_link || "https://randomuser.me/api/portraits/women/68.jpg"}
-                                borderRadius="full"
-                                boxSize="30px"
-                                mr={3}
-                                alt="Property"
-                              />
-                              {property.unit}
-                            </Flex>
-                          )}
-                        </Box>
-                        <Box as="td" p={3}>{property.unit || "Unit 20"}</Box>
-                        <Box as="td" p={3}>{property.application_type || "Purchase"}</Box>
-                        <Box as="td" p={3}>
-                          <Box
-                            px={3}
-                            py={1}
-                            borderRadius="full"
-                            bg="gray.100"
-                            display="inline-block"
-                            textAlign="center"
-                          >
-                            {property.status || "In Process"}
-                          </Box>
-                        </Box>
-                      </Box>
-                    ))
-                  ) : (
-                    <Box as="tr">
-                      <Box 
-                        as="td" 
-                        p={3} 
-                        textAlign="center" 
-                      >
-                        {loading ? "Loading properties..." : "No properties found"}
-                      </Box>
-                    </Box>
-                  )}
-                </Box>
-              </Box>
-            </Box>
-          </Box>
-        </Flex>
-      </Box>
-    </Flex>
+        </Box>
+      </Flex>
   );
 };
 

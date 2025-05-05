@@ -27,6 +27,7 @@ export function MainRoutes(){
                     <Suspense fallback={<></>}> <Boxrooms/> </Suspense>} />
                 <Route path={'commerce/'} element={
                     <Suspense fallback={<></>}> <Commerce/> </Suspense>} />
+
             </Route>
            
         </Routes>

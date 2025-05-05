@@ -19,8 +19,6 @@ const productList = [
 ];
 
 const utilList = [
-    {text: "About company", href: "/aboutUs"},
-    {text: "Contacts", href: "/contacts"},
     {text: "Ai-assistant", href: "https://t.me/archiq_agent_bot"}
 
 ];
