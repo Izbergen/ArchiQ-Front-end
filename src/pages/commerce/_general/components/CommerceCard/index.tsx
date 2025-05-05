@@ -9,6 +9,11 @@ interface CommerceCardProps {
 }
 
 const CommerceCard = ({ property }: CommerceCardProps) => {
+    // Safely extract complex name
+    const complexRaw = property.complex as any;
+    const complexName = complexRaw && typeof complexRaw === 'object'
+        ? complexRaw.name ?? JSON.stringify(complexRaw)
+        : String(property.complex);
     return (
         <Box
             width={"770px"}
@@ -38,7 +43,7 @@ const CommerceCard = ({ property }: CommerceCardProps) => {
                 zIndex={2}
                 color="white"
             >
-                <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'32px'}>{property.complex}</Heading>
+                <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'32px'}>{complexName}</Heading>
                 <Text fontFamily={FONTS.StyreneALC.REGULAR} fontSize="16px">Rent - {property.rental_price ?? property.price} Tng</Text>
                 <Text fontFamily={FONTS.StyreneALC.REGULAR} fontSize="16px">{property.area} square meters</Text>
                 <HStack pt={2}>

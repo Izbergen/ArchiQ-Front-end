@@ -3,8 +3,12 @@ import {
     Flex,
     HStack,
     Link,
+    IconButton
 } from "@chakra-ui/react";
+import { LuCircleUser } from "react-icons/lu";
 import {Container} from "@/general/components/ui/Container/Container.tsx";
+import { useNavigate } from "react-router-dom";
+import {useTokens} from "@/general/hooks/useToken.ts";
 
 const productList = [
     {text: "All products" , href: "/residential-complexes" },
@@ -17,11 +21,14 @@ const productList = [
 const utilList = [
     {text: "About company", href: "/aboutUs"},
     {text: "Contacts", href: "/contacts"},
-    {text: "Ai-assistant", href: "/ai-assistant"}
+    {text: "Ai-assistant", href: "https://t.me/archiq_agent_bot"}
 
 ];
 
 const Navbar = () => {
+    const navigate = useNavigate();
+    const token = useTokens();
+    const isLoggedIn = token.getAccessToken();
     return (
         <Container
             pt={"4"}
@@ -80,15 +87,26 @@ const Navbar = () => {
                             bg="blue.primary"
                             mx={4}
                         />
-
-                        <Link
-                            href="/auth"
-                            textStyle="StyreneALCBold"
-                            fontSize="16px"
-                            _hover={{ textDecoration: "none", color: "blue.600" }}
-                        >
-                            Войти
-                        </Link>
+                        {isLoggedIn ? (
+                            <IconButton
+                                aria-label="User Profile"
+                                variant="ghost"
+                                onClick={() => navigate("/user")}
+                                fontSize="24px"
+                                borderRadius="full"
+                            >
+                                <LuCircleUser size={'30px'}/>
+                            </IconButton>
+                        ) : (
+                            <Link
+                                href="/auth"
+                                textStyle="StyreneALCBold"
+                                fontSize="16px"
+                                _hover={{ textDecoration: "none", color: "blue.600" }}
+                            >
+                                Войти
+                            </Link>
+                        )}
                     </Flex>
                 </Flex>
             </Box>

@@ -1,13 +1,14 @@
-export enum PropertyCategory {
-  APARTMENT = 'APARTMENT',
-  PARKING = 'PARKING',
-  BOXROOM = 'BOXROOM',
-  COMMERCE = 'COMMERCE',
+export enum CategoryEnum {
+  APARTMENT = "APARTMENT",
+  BOXROOM = "BOXROOM",
+  PARKING = "PARKING",
+  COMMERCE = "COMMERCE",
 }
 
-export enum BuildingStatus {
-  ACTIVE = 'ACTIVE',
-  INACTIVE = 'INACTIVE',
+export enum BuildingStatusEnum {
+  PLANNING = "PLANNING",
+  UNDER_CONSTRUCTION = "UNDER_CONSTRUCTION",
+  COMPLETED = "COMPLETED",
 }
 
 export interface PropertyPhoto {
@@ -17,30 +18,35 @@ export interface PropertyPhoto {
 
 export interface PropertyVideo {
   id: number;
-  // Add other fields as needed
+  video_link: string;
+}
+
+export interface Complex {
+  id?: number;
+  name: string;
+  status?: BuildingStatusEnum;
 }
 
 export interface Block {
-  id: number;
+  id?: number;
   block_number: string;
-  entrance_number: string;
-  total_floors: number;
-  building_status: BuildingStatus;
 }
 
 export interface Property {
   id: number;
-  category: PropertyCategory;
-  number?: number;
-  price?: string;
+  category: CategoryEnum | string;
+  complex: Complex | string;
+  price: string;
   price_per_sqm?: string;
   rental_price?: string;
-  floor?: number;
+  floor?: string;
   area: string;
-  rooms?: number;
+  rooms?: string;
   layout?: string;
+  unit?: string;
+  block?: Block;
+  application_type?: string;
+  status?: string;
   property_photos?: PropertyPhoto[];
   property_videos?: PropertyVideo[];
-  block: Block;
-  complex: string;
 } 

@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    Box, Button, HStack, VStack, Text, Input, SimpleGrid, Select } from '@chakra-ui/react';
+    Box, Button, HStack, VStack, Text, Input, SimpleGrid } from '@chakra-ui/react';
+
+const formatPrice = (value: number) =>
+    new Intl.NumberFormat("ru-RU", { style: "currency", currency: "KZT", maximumFractionDigits: 0 }).format(value);
 
 export enum PropertyClass {
     ALL = 'ALL',
@@ -31,9 +34,12 @@ interface PropertyFilterProps {
     complexes?: ComplexOption[];
     onChange?: (filters: PropertyFilters) => void;
     initialFilters?: PropertyFilters;
+    roomsAvailable?: (number | string)[];
+    areaRange?: [number, number];
+    priceRange?: [number, number];
+    floorRange?: [number, number];
 }
 
-const roomOptions = ['ALL', 'ST', 1, 2, 3, '4+'] as const;
 const classOptions = [
     { label: 'All', value: PropertyClass.ALL },
     { label: 'Standard', value: PropertyClass.STANDARD },
@@ -42,35 +48,45 @@ const classOptions = [
     { label: 'Premium', value: PropertyClass.PREMIUM },
 ];
 
-export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], onChange, initialFilters }) => {
+export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], onChange, initialFilters, roomsAvailable = ['ALL'], areaRange = [25, 350], priceRange = [50, 342], floorRange = [1, 5] }) => {
     const defaultFilters: PropertyFilters = initialFilters || {
         propertyClass: PropertyClass.ALL,
         rooms: 'ALL',
-        minArea: 25,
-        maxArea: 350,
-        minPrice: 50,
-        maxPrice: 342,
-        minFloor: 1,
-        maxFloor: 5,
+        minArea: areaRange[0],
+        maxArea: areaRange[1],
+        minPrice: priceRange[0],
+        maxPrice: priceRange[1],
+        minFloor: floorRange[0],
+        maxFloor: floorRange[1],
     };
     const [filtersDraft, setFiltersDraft] = useState<PropertyFilters>(defaultFilters);
-    const [appliedFilters, setAppliedFilters] = useState<PropertyFilters>(defaultFilters);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [_ , setAppliedFilters] = useState<PropertyFilters>(defaultFilters);
 
-    const handleDraftChange = (key: keyof PropertyFilters, value: any) => {
+    useEffect(() => {
+        if (initialFilters) {
+            setFiltersDraft(initialFilters);
+            setAppliedFilters(initialFilters);
+        }
+    }, [initialFilters]);
+
+    const handleDraftChange = (key: keyof PropertyFilters, value: unknown) => {
         setFiltersDraft({ ...filtersDraft, [key]: value });
     };
 
     const handleApply = () => {
         setAppliedFilters(filtersDraft);
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onChange && onChange(filtersDraft);
     };
 
     const handleReset = () => {
         setFiltersDraft(defaultFilters);
         setAppliedFilters(defaultFilters);
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         onChange && onChange(defaultFilters);
     };
-
+    
     return (
         <Box bg="white" borderRadius="20px" p={6} boxShadow="md" w="full" >
             <VStack align="start" w="full">
@@ -120,15 +136,15 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                     <Box>
                         <Text mb={1}>Rooms</Text>
                         <HStack>
-                            {roomOptions.map(opt => (
+                            {roomsAvailable.map(opt => (
                                 <Button
-                                    key={opt}
+                                    key={String(opt)}
                                     variant={filtersDraft.rooms === opt ? 'solid' : 'outline'}
                                     colorScheme={filtersDraft.rooms === opt ? 'blue' : 'gray'}
                                     onClick={() => handleDraftChange('rooms', opt)}
                                     size="sm"
                                 >
-                                    {opt}
+                                    {String(opt)}
                                 </Button>
                             ))}
                         </HStack>
@@ -144,6 +160,8 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                             <Input
                                 type="number"
                                 value={filtersDraft.minArea}
+                                min={areaRange[0]}
+                                max={areaRange[1]}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDraftChange('minArea', Number(e.target.value))}
                                 width="70px"
                                 size="sm"
@@ -152,6 +170,8 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                             <Input
                                 type="number"
                                 value={filtersDraft.maxArea}
+                                min={areaRange[0]}
+                                max={areaRange[1]}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDraftChange('maxArea', Number(e.target.value))}
                                 width="70px"
                                 size="sm"
@@ -161,11 +181,13 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
 
                     {/* Price */}
                     <Box>
-                        <Text mb={1}>Price, mln Tng</Text>
+                        <Text mb={1}>Price</Text>
                         <HStack>
                             <Input
                                 type="number"
                                 value={filtersDraft.minPrice}
+                                min={priceRange[0]}
+                                max={priceRange[1]}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDraftChange('minPrice', Number(e.target.value))}
                                 width="70px"
                                 size="sm"
@@ -174,11 +196,16 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                             <Input
                                 type="number"
                                 value={filtersDraft.maxPrice}
+                                min={priceRange[0]}
+                                max={priceRange[1]}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDraftChange('maxPrice', Number(e.target.value))}
                                 width="70px"
                                 size="sm"
                             />
                         </HStack>
+                        <Text mt={1} fontSize="xs" color="gray.500">
+                            {formatPrice(filtersDraft.minPrice!)} - {formatPrice(filtersDraft.maxPrice!)}
+                        </Text>
                     </Box>
 
                     {/* Floor */}
@@ -188,6 +215,8 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                             <Input
                                 type="number"
                                 value={filtersDraft.minFloor}
+                                min={floorRange[0]}
+                                max={floorRange[1]}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDraftChange('minFloor', Number(e.target.value))}
                                 width="70px"
                                 size="sm"
@@ -196,6 +225,8 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                             <Input
                                 type="number"
                                 value={filtersDraft.maxFloor}
+                                min={floorRange[0]}
+                                max={floorRange[1]}
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleDraftChange('maxFloor', Number(e.target.value))}
                                 width="70px"
                                 size="sm"
