@@ -18,6 +18,7 @@ export function MainRoutes(){
                 <Route path={'residential-complexes/:id'} element={<ResdenceComplexDetailPage />} />
                 <Route path={'residential-complexes/'} element={
                     <Suspense fallback={<></>}><ResdenceComplexCatalogPage /> </Suspense>} />
+
                 <Route path={'apartments/'} element={
                     <Suspense fallback={<></>}> <Apartments/> </Suspense>} />
                 <Route path={'parking/'} element={
