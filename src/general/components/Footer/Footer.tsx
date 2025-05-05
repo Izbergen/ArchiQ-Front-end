@@ -6,7 +6,7 @@ import {FONTS} from "@/general/constants";
 
 const Footer: React.FC = () => {
     const Projects = [
-        { subtitle: 'All projects', link: '/allprojects' },
+        { subtitle: 'All projects', link: '/residential-complexes' },
         { subtitle: 'apartments',   link: '/apartments'   },
         { subtitle: 'Parking',      link: '/parking'      },
         { subtitle: 'Boxrooms',     link: '/boxrooms'     },
@@ -14,17 +14,16 @@ const Footer: React.FC = () => {
     ];
 
     const Contacts = [
-        { subtitle: 'Sales office',      link: '/sales'     },
-        { subtitle: 'Service centers',   link: '/services'  },
         { subtitle: 'Instagram',         link: 'https://www.instagram.com/herztard/' },
         { subtitle: 'Telegram',          link: 'https://t.me/herztard'  },
         { subtitle: 'WhatsApp',          link: 'https://wa.me/77762827898'  },
     ];
 
-    const AboutCompany = [
-        { subtitle: 'About us', link: '/about'   },
-        { subtitle: 'History',  link: '/history' },
-    ];
+    const AboutCompany: Array<{subtitle: string , link: string}> = [] ;
+    //     [
+    //     // { subtitle: 'About us', link: '/about'   },
+    //     // { subtitle: 'History',  link: '/history' },
+    // ];
 
     return (
         <Center bg={'white'}  as="footer"  pt={'80px'} pb={'94px'}>
