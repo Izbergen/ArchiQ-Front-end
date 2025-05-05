@@ -1,7 +1,7 @@
 // src/store/useProjectModuleStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { APARTMENT_CLASS, PROPERTY_CATEGORY } from "../general/types";
+import { APARTMENT_CLASS, PROPERTY_CATEGORY } from "@/general/types/api.types";
 
 export type IState = {
   available_only: boolean;
@@ -9,17 +9,20 @@ export type IState = {
   district: number | null;
   max_area: number | null;
   min_area: number | null;
+  min_floor: number | null;
+  max_floor: number | null;
   min_total_price: number | null;
   max_total_price: number | null;
   property_category: PROPERTY_CATEGORY | null;
   rooms: number | null;
 };
 
+
 type RequiredNonNull<T> = {
   [P in keyof T]-?: Exclude<T[P], null>;
 };
 
-export type APARTMENT_FIELDS = RequiredNonNull<Omit<IState, "district">>;
+export type APARTMENT_FIELDS = Omit<IState, "district" | "min_total_price" | "max_total_price" | "available_only" | "property_category">;
 export type COMMERCE_FIELDS = RequiredNonNull<Pick<IState, "max_area" | "min_area">>;
 export type PARKING_FIELDS = RequiredNonNull<Pick<IState, "max_area" | "min_area">>;
 export type BOXROOM_FIELDS = RequiredNonNull<Pick<IState, "max_area" | "min_area">>;
@@ -42,6 +45,8 @@ const initialState: IState = {
   district: null,
   max_area: null,
   min_area: null,
+  min_floor: null,
+  max_floor: null,
   min_total_price: null,
   max_total_price: null,
   property_category: null,
@@ -71,13 +76,14 @@ export const useProjectModuleStore = create<IModuleStore>()(
       setApartmentFields: (fields) =>
         set(() => ({
           ...fields,
+          property_category: PROPERTY_CATEGORY.APARTMENT
         })),
 
       setCommerceFields: (fields) =>
         set(() => ({
           ...fields,
           class_type: null,
-          property_category: null,
+          property_category: PROPERTY_CATEGORY.COMMERCE,
           rooms: null,
         })),
 
@@ -85,7 +91,7 @@ export const useProjectModuleStore = create<IModuleStore>()(
         set(() => ({
           ...fields,
           class_type: null,
-          property_category: null,
+          property_category: PROPERTY_CATEGORY.PARKING,
           rooms: null,
         })),
 
@@ -94,19 +100,21 @@ export const useProjectModuleStore = create<IModuleStore>()(
         set(() => ({
           ...fields,
           class_type: null,
-          district: null,
-          property_category: null,
+          property_category: PROPERTY_CATEGORY.BOXROOM,
           rooms: null,
         })),
 
 
         getFilledFields: () => {
-            const state = get();
-            return Object.fromEntries(
-              Object.entries(state)
-                .filter(([_, v]) => v !== null)
-            ) as Partial<IState>;
-        },
+          const state = get();
+        
+          return Object.fromEntries(
+            Object.entries(state).filter(([_, value]) =>
+              value !== null &&
+              typeof value !== "function" 
+            )
+          ) as Partial<IState>;
+        }
     }),
     { name: "projects-module-state" }
   )

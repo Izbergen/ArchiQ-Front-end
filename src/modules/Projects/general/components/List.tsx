@@ -1,4 +1,5 @@
-import {IResidence} from "./../types.ts";
+
+import { IResidence } from "@/general/types/api.types";
 import ResidentialComplexCard from "@/modules/Projects/general/components/Card.tsx";
 import {SimpleGrid} from "@chakra-ui/react";
 

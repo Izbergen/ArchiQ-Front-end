@@ -1,7 +1,7 @@
 import {FC} from "react";
 import { Box, Image } from "@chakra-ui/react";
 import Slider from "react-slick";
-import {IPhoto} from "./../types.ts";
+import {IPhoto} from "@/general/types/api.types";
 
 export interface ImageSliderProps {
     photos: IPhoto[];

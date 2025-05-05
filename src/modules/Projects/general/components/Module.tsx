@@ -1,15 +1,17 @@
-import { IResidence } from "../types";
+import { IResidence } from "@/general/types/api.types";
 import ResidenceComplexList from "./List";
-import {useState, useEffect} from "react";
+import {useEffect} from "react";
 import {useDI} from "@/general/hooks/useDI.ts";
 import {IAxiosService} from "@/general/services/axios";
 import {CoreTypes} from "@/general/di/modules/core";
 import { Flex } from "@chakra-ui/react";
 import ResidenceComplexFilter from "./Filter";
+import { useGlobalStore } from "@/general/hooks/useStore";
 
 
 export default function Module() {
-    const [residences , setResidences] = useState<IResidence[]>([]);
+    const setResidences = useGlobalStore((state) => state.setResidences)
+    const residences = useGlobalStore((state) => state.residences)
     const axiosService = useDI<IAxiosService>(CoreTypes.AxiosService)
     useEffect(() => {
         (async() => {

@@ -20,7 +20,6 @@ import { IAxiosService } from "@/general/services/axios"
 import { IAPI } from "@/general/constants/api.constants"
 import { useLocalStore } from "../../hooks"
 
-// теперь поле — массив строк
 const formSchema = z.object({
   district: z.string({ message: "Район обязателен" }).array(),
 })
@@ -40,7 +39,6 @@ export default function DistrictsSelector() {
   } = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // если есть выбранный район — оборачиваем в массив, иначе пустой массив
       district: selectedDistrict != null ? [String(selectedDistrict)] : [],
     },
   })
@@ -60,7 +58,6 @@ export default function DistrictsSelector() {
     )
   }
 
-  // коллекция для Select.Root
   const collection = createListCollection({
     items: districts.map((d) => ({
       label: d.name,
@@ -70,7 +67,6 @@ export default function DistrictsSelector() {
 
   return (
     <Field.Root invalid={!!errors.district} width="320px">
-      <Field.Label>Выберите район</Field.Label>
 
       <Controller
         name="district"

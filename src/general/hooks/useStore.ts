@@ -1,6 +1,9 @@
 import { useContext, Context } from "react";
 import { StoreApi, UseBoundStore } from "zustand";
 
+import {AppStoreContext} from "@/general/providers/store.provider";
+import { IAppStore } from "@/general/store";
+
 export function useStore<TState, Selected>(
     StoreContext: Context<UseBoundStore<StoreApi<TState>> | null>,
     selector: (state: TState) => Selected
@@ -12,4 +15,10 @@ export function useStore<TState, Selected>(
         );
     }
     return store(selector);
+}
+
+export function useGlobalStore<Selected>(
+    selector: (state: IAppStore) => Selected
+): Selected {
+    return useStore<IAppStore, Selected>(AppStoreContext, selector);
 }

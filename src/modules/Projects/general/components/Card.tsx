@@ -10,7 +10,7 @@ import {
   } from "@chakra-ui/react";
   import { FC } from "react";
   import { LuArrowUpRight } from "react-icons/lu";
-  import { IResidence } from "../types";
+  import { IResidence } from "@/general/types/api.types";
   import ImageSlider from "./ImageSlider";
   import { COLORS } from "@/general/constants";
   
@@ -27,7 +27,6 @@ import {
       class_type.charAt(0).toUpperCase() +
       class_type.slice(1).toLowerCase();
   
-    // Gradient overlay from bg-1 to transparent
     const bgOverlay = `linear(to-r, ${COLORS['bg-1']}, transparent)`;
   
     return (
@@ -42,7 +41,6 @@ import {
         transition="transform 0.3s, box-shadow 0.3s"
         _hover={{ transform: "scale(1.02)", boxShadow: "xl" }}
       >
-        {/* Слайдер как фон */}
         <Box position="absolute" inset={0} zIndex={0}>
           <ImageSlider
             photos={residential_complex_photos.map((p) => ({
@@ -50,7 +48,6 @@ import {
               photo_link: p.photo_link,
             }))}
           />
-          {/* Градиентный оверлей */}
           <Box
             position="absolute"
             inset={0}
@@ -59,7 +56,6 @@ import {
           />
         </Box>
   
-        {/* Контент */}
         <Flex
           position="relative"
           zIndex={2}
@@ -94,7 +90,7 @@ import {
               fontWeight="bold"
               color={'white'}
             >
-              Подробнее&nbsp;
+              More&nbsp;
               <LuArrowUpRight />
             </LinkOverlay>
           </Box>
