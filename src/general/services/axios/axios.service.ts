@@ -33,6 +33,7 @@ export class AxiosService implements IAxiosService {
             if (token!! && config.headers) {
                 config.headers['Authorization'] = `Bearer ${token}`;
             }
+            config.headers['Content-Type'] = 'application/json';
             return config;
         });
 
@@ -108,5 +109,9 @@ export class AxiosService implements IAxiosService {
 
     public getAxiosInstance(): AxiosInstance {
         return this.axiosInstance;
+    }
+    public async patch<T, U = any>(url: string, data?: U, config?: AxiosRequestConfig): Promise<T> {
+        const response: AxiosResponse<T> = await this.axiosInstance.patch<T>(url, data, config);
+        return response.data;
     }
 }

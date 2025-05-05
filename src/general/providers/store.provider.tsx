@@ -1,17 +1,18 @@
-import { createContext, ReactNode } from 'react';
+import {Context, createContext, ReactNode} from 'react';
 import { UseBoundStore, StoreApi } from 'zustand';
 import { IAppStore } from '@/general/store';
 
 export const AppStoreContext = createContext<UseBoundStore<StoreApi<IAppStore>> | null>(null);
 
-export function StoreProvider({children, store}: {
+export function StoreProvider<T, U = UseBoundStore<StoreApi<T>>>({children, store , Context}: {
     children: ReactNode;
-    store: UseBoundStore<StoreApi<IAppStore>>;
+    store: U;
+    Context: Context<U>
 }) {
     return (
-        <AppStoreContext.Provider value={store}>
+        <Context.Provider value={store} >
             {children}
-        </AppStoreContext.Provider>
+        </Context.Provider>
     );
 }
 

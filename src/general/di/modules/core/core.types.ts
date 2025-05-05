@@ -3,4 +3,5 @@ export const CoreTypes = Object.freeze({
     TokenService: Symbol.for('TokenService'),
     AxiosService: Symbol.for('AxiosService'),
     LoggerService: Symbol.for('LoggerService'),
+    BannerService: Symbol.for('BannerService'),
 });

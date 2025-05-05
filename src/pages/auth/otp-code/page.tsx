@@ -1,9 +1,10 @@
+import {useEffect, useState} from 'react'
 import {Field, Flex, Text } from "@chakra-ui/react";
 
 import {Button} from "@/general/components/ui/Button";
 
 
-import {COLORS } from "@/general/constants";
+import {COLORS} from "@/general/constants";
 import {useNavigate} from "react-router-dom";
 
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -29,25 +30,47 @@ export default function OTPCodePage() {
     const { handleSubmit, control, formState } = useForm<otpInterface>({
         resolver: zodResolver(otpSchema),
     })
+
+    const [hasSent, setHasSent] = useState(false);
+
+    useEffect(() => {
+
+        if (phoneNumber && !hasSent) {
+            sendOTP({ phoneNumber })
+                .then(result => {
+                    if (!result.success) toaster.error(result.message);
+                })
+                .catch(err => {
+                    toaster.error(err.message);
+                })
+                .finally(() => setHasSent(true));
+        }
+    }, [phoneNumber, hasSent, sendOTP]);
+
     const onSubmit = handleSubmit(async (data) => {
         try {
             const normalizedData = normalizeData(data);
-            if(!phoneNumber) throw new Error("Phone number is required");
+            if (!phoneNumber) throw new Error("Phone number is required");
 
-            const verified = await verifyOTP({
+            const { success, message } = await verifyOTP({
                 phoneNumber,
                 ...normalizedData
             });
-            if(!verified) {
-                toaster.error("Otp Code Verification Error!.")
+
+            if (!success) {
+                toaster.error(message || "Ошибка верификации кода");
+                return;
             }
-            navigate('auth/register')
+
+            // 3) абсолютный путь и замена записи истории
+            navigate("/auth/register", { replace: true });
         } catch (error) {
-            if(error instanceof Error){
-                toaster.error(error.message)
+            if (error instanceof Error) {
+                toaster.error(error.message);
             }
         }
-    })
+    });
+
 
     const navigate = useNavigate();
 

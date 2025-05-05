@@ -5,7 +5,7 @@ import {
     LoginProps,
     RegisterProps,
     SendOTPProps, SendOTPResponse,
-    VerifyOTPProps
+    VerifyOTPProps, VerifyOTPResponse
 } from "./accounts.interface";
 import { TokenPair } from "@/general/types/auth.types";
 
@@ -20,16 +20,17 @@ type CheckPhoneResponse = {
     exists:	boolean,
     next: 'register' | 'login'
 }
-
-type VerifyOTPResponse = {
-    verified: boolean,
-    message: string
+type UnnormalizedTokenPair = {
+    refresh: string,
+    access: string
 }
+
+
 type PasswordPair = {
-    password1: string
+    password: string
     password2: string
 }
-type RegisterResponse = Omit<RegisterProps & PasswordPair, 'password'| 'confirmPassword'>
+type RegisterResponse = Omit<RegisterProps, 'password'| 'confirmPassword' > & PasswordPair
 
 
 @injectable()
@@ -51,30 +52,32 @@ export class AccountsService implements IAccountsService {
     }
     async login({phoneNumber, ...props}: LoginProps): Promise<TokenPair> {
         const response = await this.axiosService.post<
-            any,
+            UnnormalizedTokenPair,
             KeysToSnakeCase<LoginProps>>
         (
             this.apiConstants.URLS.ACCOUNTS.LOGIN,
             {phone_number: phoneNumber, ...props,}
         )
-        return mapTokens(response.data);
+        return mapTokens(response);
 
     }
     async register({phoneNumber, password, confirmPassword , lastName , firstName} : RegisterProps): Promise<TokenPair> {
-        return await this.axiosService.post<TokenPair,KeysToSnakeCase<RegisterResponse>>(this.apiConstants.URLS.ACCOUNTS.REGISTER, {
+        const response = await this.axiosService.post<UnnormalizedTokenPair ,KeysToSnakeCase<RegisterResponse>>(this.apiConstants.URLS.ACCOUNTS.REGISTER, {
             phone_number: phoneNumber,
-            password1: password,
+            password: password,
             password2: confirmPassword,
             last_name: lastName,
             first_name: firstName,
         })
+
+        return mapTokens(response);
     }
     async sendOTP({phoneNumber , ...props} : SendOTPProps): Promise<SendOTPResponse> {
         return await this.axiosService.post<
             SendOTPResponse,
             KeysToSnakeCase<SendOTPProps>>
         (
-            this.apiConstants.URLS.ACCOUNTS.VERIFY_OTP,
+            this.apiConstants.URLS.ACCOUNTS.SEND_OTP,
             {
                 phone_number: phoneNumber,
                 ...props
@@ -82,7 +85,7 @@ export class AccountsService implements IAccountsService {
         )
 
     }
-    async verifyOTP({phoneNumber , ...props}: VerifyOTPProps): Promise<boolean> {
+    async verifyOTP({phoneNumber , ...props}: VerifyOTPProps): Promise<VerifyOTPResponse> {
         const response = await this.axiosService.post<
             VerifyOTPResponse,
             KeysToSnakeCase<VerifyOTPProps>>
@@ -93,6 +96,8 @@ export class AccountsService implements IAccountsService {
                     ...props
             }
         )
-        return response.verified
+        return {
+            ...response
+        }
     }
 }

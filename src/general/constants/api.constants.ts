@@ -5,20 +5,34 @@ const API_TOKEN = Object.freeze({
     REFRESH_TOKEN: 'api/token/refresh/',
     VERIFY_TOKEN: 'api/token/verify/'
 })
+const BANNERS = Object.freeze({
+    BANNERS: "/banners/"
+})
+const CITIES = 'cities/'
+const DISTRICTS = 'districts/'
+const PROPERTIES = 'properties/'
+const RESIDENTIAL_COMPLEXES = 'residential-complexes/'
+
 
 const ACCOUNTS = Object.freeze({
-    CHECK_PHONE: 'accounts/check-phone',
-    LOGIN: 'accounts/login',
-    REGISTER: 'accounts/register',
-    SEND_OTP: 'accounts/send-otp',
-    VERIFY_OTP: 'accounts/verify-otp',
+    CHECK_PHONE: 'accounts/check-phone/',
+    LOGIN: 'accounts/login/',
+    REGISTER: 'accounts/register/',
+    SEND_OTP: 'accounts/send-otp/',
+    VERIFY_OTP: 'accounts/verify-otp/',
 })
+
 
 export const API = {
     BASE_URL: API_URL,
     URLS: {
         API_TOKEN,
-        ACCOUNTS
+        ACCOUNTS,
+        BANNERS,
+        CITIES,
+        PROPERTIES,
+        DISTRICTS,
+        RESIDENTIAL_COMPLEXES
     }
 } as const;
 
