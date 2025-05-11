@@ -18,7 +18,7 @@ import { FONTS } from "@/general/constants";
 import { useDI } from "@/general/hooks/useDI";
 import { CoreTypes } from "@/general/di/modules/core";
 import type { IAxiosService } from "@/general/services/axios";
-import { FaFile, FaSignOutAlt } from "react-icons/fa";
+import { FaFile, FaSignOutAlt, FaExclamationTriangle } from "react-icons/fa";
 import { toaster } from "@/general/components/ui/toaster";
 import { useTokens } from "@/general/hooks/useToken";
 import { useNavigate } from "react-router-dom";
@@ -53,6 +53,16 @@ interface Property {
   complex: string;
 }
 
+// Report issue types
+const REPORT_TYPES = [
+  { value: "INCORRECT_INFO", label: "Incorrect Information" },
+  { value: "PRICE_ISSUE", label: "Price Issue" },
+  { value: "PHOTO_ISSUE", label: "Photo Issue" },
+  { value: "OTHER", label: "Other" },
+];
+
+const REPORT_URL = "https://api.slyamgazy.kz/support/reports/";
+
 const UserPage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -62,6 +72,13 @@ const UserPage = () => {
   const axiosService = useDI<IAxiosService>(CoreTypes.AxiosService);
   const tokenService = useTokens();
   const navigate = useNavigate();
+  const [reportModalOpen, setReportModalOpen] = useState(false);
+  const [reportPropertyId, setReportPropertyId] = useState<number | null>(null);
+  const [reportType, setReportType] = useState("");
+  const [reportTitle, setReportTitle] = useState("");
+  const [reportDescription, setReportDescription] = useState("");
+  const [reportFiles, setReportFiles] = useState<FileList | null>(null);
+  const [reportSubmitting, setReportSubmitting] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -127,6 +144,61 @@ const UserPage = () => {
     
     toaster.success("Successfully logged out");
     navigate('/auth');
+  };
+
+  const openReportModal = (propertyId: number) => {
+    setReportPropertyId(propertyId);
+    setReportType("");
+    setReportTitle("");
+    setReportDescription("");
+    setReportFiles(null);
+    setReportModalOpen(true);
+  };
+
+  const closeReportModal = () => {
+    setReportModalOpen(false);
+    setReportPropertyId(null);
+    setReportType("");
+    setReportTitle("");
+    setReportDescription("");
+    setReportFiles(null);
+  };
+
+  const handleSubmitReport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reportPropertyId || !reportTitle.trim() || !reportDescription.trim()) {
+      toaster.error("Title and content are required.");
+      return;
+    }
+    setReportSubmitting(true);
+    try {
+      const formData = new FormData();
+      formData.append("property", reportPropertyId.toString());
+      formData.append("report_type", reportType);
+      formData.append("title", reportTitle);
+      formData.append("content", reportDescription);
+      if (reportFiles && reportFiles.length > 0) {
+        for (let i = 0; i < reportFiles.length; i++) {
+          formData.append("attachments", reportFiles[i]);
+        }
+      }
+      const accessToken = localStorage.getItem('access_token') || tokenService.getAccessToken();
+      const res = await fetch(REPORT_URL, {
+        method: "POST",
+        body: formData,
+        headers: {
+          ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+        },
+      });
+      if (!res.ok) throw new Error("Failed to submit report");
+      toaster.success("Report submitted successfully");
+      closeReportModal();
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      toaster.error("Failed to submit report. Please try again.");
+    } finally {
+      setReportSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -241,6 +313,7 @@ const UserPage = () => {
                       <Table.ColumnHeader>Unit Number</Table.ColumnHeader>
                       <Table.ColumnHeader>Floor</Table.ColumnHeader>
                       <Table.ColumnHeader>Building Status</Table.ColumnHeader>
+                      <Table.ColumnHeader>Actions</Table.ColumnHeader>
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
@@ -263,11 +336,20 @@ const UserPage = () => {
                               <Table.Cell>{property.number}</Table.Cell>
                               <Table.Cell>{property.floor}</Table.Cell>
                               <Table.Cell>{property.block?.building_status || "N/A"}</Table.Cell>
+                              <Table.Cell>
+                                <Button
+                                  size="xs"
+                                  colorScheme="red"
+                                  onClick={() => openReportModal(property.id)}
+                                >
+                                  <Icon as={FaExclamationTriangle} mr={1} /> Report
+                                </Button>
+                              </Table.Cell>
                             </Table.Row>
                         ))
                     ) : (
                         <Table.Row>
-                          <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
+                          <Table.Cell colSpan={5} style={{ textAlign: "center" }}>
                             No properties found
                           </Table.Cell>
                         </Table.Row>
@@ -277,6 +359,115 @@ const UserPage = () => {
               </Box>
             </Box>
           </Flex>
+
+          {/* Report Modal */}
+          {reportModalOpen && (
+            <Box
+              position="fixed"
+              top="0"
+              left="0"
+              width="100%"
+              height="100%"
+              bg="rgba(0,0,0,0.5)"
+              zIndex={1000}
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              onClick={closeReportModal}
+            >
+              <Box
+                bg="white"
+                borderRadius="xl"
+                p={8}
+                minW="350px"
+                maxW="90vw"
+                onClick={e => e.stopPropagation()}
+              >
+                <Heading size="md" color="#52A0FF" mb={4} fontFamily={FONTS.StyreneALC.BOLD}>
+                  Report Property
+                </Heading>
+                <form onSubmit={handleSubmitReport}>
+                  <VStack gap={4} align="stretch">
+                    <Field.Root>
+                      <Field.Label>Issue Type</Field.Label>
+                      <select
+                        value={reportType}
+                        onChange={e => setReportType(e.target.value)}
+                        style={{
+                          fontFamily: FONTS.StyreneALC.REGULAR,
+                          width: '100%',
+                          padding: '8px',
+                          borderRadius: '8px',
+                          border: '1px solid #E2E8F0',
+                        }}
+                        required
+                      >
+                        <option value="">Select issue type</option>
+                        {REPORT_TYPES.map(type => (
+                          <option key={type.value} value={type.value}>
+                            {type.label}
+                          </option>
+                        ))}
+                      </select>
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>Title</Field.Label>
+                      <Input
+                        value={reportTitle}
+                        onChange={e => setReportTitle(e.target.value)}
+                        placeholder="Enter a short title for the issue"
+                        fontFamily={FONTS.StyreneALC.REGULAR}
+                        required
+                      />
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>Content</Field.Label>
+                      <textarea
+                        rows={4}
+                        value={reportDescription}
+                        onChange={e => setReportDescription(e.target.value)}
+                        placeholder="Describe the issue in detail..."
+                        style={{
+                          fontFamily: FONTS.StyreneALC.REGULAR,
+                          width: '100%',
+                          padding: '8px',
+                          borderRadius: '8px',
+                          border: '1px solid #E2E8F0',
+                        }}
+                        required
+                      />
+                    </Field.Root>
+                    <Field.Root>
+                      <Field.Label>Attach Files (optional)</Field.Label>
+                      <Input
+                        type="file"
+                        multiple
+                        onChange={e => setReportFiles(e.target.files)}
+                        accept="image/*,.pdf,.doc,.docx"
+                        fontFamily={FONTS.StyreneALC.REGULAR}
+                        p={1}
+                      />
+                    </Field.Root>
+                  </VStack>
+                  <HStack justify="flex-end" gap={3} mt={6}>
+                    <Button variant="ghost" onClick={closeReportModal}>
+                      Cancel
+                    </Button>
+                    <Button
+                      colorScheme="red"
+                      type="submit"
+                      loading={reportSubmitting}
+                      loadingText="Submitting..."
+                      fontFamily={FONTS.StyreneALC.BOLD}
+                      disabled={reportSubmitting}
+                    >
+                      Submit Report
+                    </Button>
+                  </HStack>
+                </form>
+              </Box>
+            </Box>
+          )}
         </Box>
       </Flex>
   );
