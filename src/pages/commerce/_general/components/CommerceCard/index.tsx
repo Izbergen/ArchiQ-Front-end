@@ -44,7 +44,7 @@ const CommerceCard = ({ property }: CommerceCardProps) => {
                 color="white"
             >
                 <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'32px'}>{complexName}</Heading>
-                <Text fontFamily={FONTS.StyreneALC.REGULAR} fontSize="16px">Rent - {property.rental_price ?? property.price} Tng</Text>
+                <Text fontFamily={FONTS.StyreneALC.REGULAR} fontSize="16px">Rent - {property.rental_price ?? property.price} ₸</Text>
                 <Text fontFamily={FONTS.StyreneALC.REGULAR} fontSize="16px">{property.area} square meters</Text>
                 <HStack pt={2}>
                     <Link fontFamily={FONTS.StyreneALC.REGULAR} href="#" color="white" fontSize="26px" display="flex" alignItems="center">

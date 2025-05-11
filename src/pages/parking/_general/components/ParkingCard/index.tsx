@@ -80,7 +80,7 @@ const ParkingCard = ({ property }: ParkingCardProps) => {
                 </HStack>
             </VStack>
             <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'20px'} color="#52A0FF" mb={"5px"}>
-                {property.price} Tng
+                {property.price} ₸
             </Heading>
             {/*@ts - ignore*/}
             <Popover.Root open={popoverOpen} >
