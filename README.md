@@ -88,8 +88,6 @@
 
 | Name                  | Student ID  | Lecture Group | Practice Group | Role                                          |
 |-----------------------|-------------|---------------|----------------|-----------------------------------------------|
-| Adilzhan Slyamgazy    | 220103151   | 04-N          | 16-P           | Backend, AI-agent development, Database setup |
-| Dauletkhan Izbergenov | 220103015   | 04-N          | 15-P           | Frontend                                      |
-| Alikhan Toleberdyyev  | 220103050   | 04-N          | 16-P           | Frontend                                      |
-| Bakdaulet Bekkhoja    | 220103014   | 04-N          | 15-P           | DevOps                                        |
-| Aknur Bauyrzhankyzy   | 220103314   | 04-N          | 16-P           | PM, Manual testing, Design-scratching         |
+| Adilzhan Slyamgazy    | 220103151   | 01-N          | 03-P           | Backend, AI-agent development, Database setup |
+| Dauletkhan Izbergenov | 220103015   | 01-N          | 03-P           | Frontend                                      |
+| Alikhan Toleberdyyev  | 220103050   | 01-N          | 03-P           | Frontend                                      |
