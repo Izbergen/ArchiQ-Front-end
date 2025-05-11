@@ -32,7 +32,7 @@ const SingleBanner: React.FC<HeroBannerProps> = ({
     // adjust padding/font sizes on mobile vs desktop
     const padding = useBreakpointValue({ base: 6, md: 12 })
     const logoSize = useBreakpointValue({ base: '3xl', md: '5xl' })
-    const descSize = useBreakpointValue({ base: 'sm', md: 'md' })
+    const descSize = useBreakpointValue({ base: 'md', md: 'xl' })
     const linkSize = useBreakpointValue({ base: 'sm', md: 'md' })
 
     return (
@@ -69,7 +69,7 @@ const SingleBanner: React.FC<HeroBannerProps> = ({
                     <Heading fontSize={logoSize} fontWeight="bold" mb={4}>
                         {logoText}
                     </Heading>
-                    <HStack justifyContent="space-between" alignItems="baseline" >
+                    <HStack justifyContent="space-between" alignItems="end"  >
 
                         <Text
                             fontSize={descSize}

@@ -5,13 +5,12 @@ import { Flex,Box} from "@chakra-ui/react";
 export function MainLayout() {
 
     return (
-       <Flex bg={'#F8F8F8'} h='100vh' direction={'column'} position={'relative'}>
+       <Flex bg={'#F8F8F8'}   direction={'column'} position={'relative'}>
             <Navbar/>
-            <Box flexGrow={1}>
+            <Box flexGrow={1} pb={'35px'}>
                 <Outlet />
             </Box>
             <Footer/>
         </Flex>
-      
     )
 }  
