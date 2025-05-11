@@ -1,4 +1,3 @@
-
 // import Carousel from "./components/ChakraCarousel.tsx";
 // import Banner from "@/pages/home/_general/_components/Banner.tsx";
 import {lazy, Suspense, useEffect, useState} from "react";
@@ -53,10 +52,10 @@ export default function HomePage() {
                     About us
                 </Heading>
                 <SingleBanner
-                    backgroundImage='https://images.unsplash.com/photo-1612852098516-55d01c75769a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDR8fHxlbnwwfHx8fA%3D%3D&auto=format&fit=crop&w=900&q=60'
-                    logoText="SDU Residence"
-                    description="Your perfect choice for modern life. Cozy apartments, green zones and safe environment will create ideal conditions for your family."
-                    detailLink="/residences/sdu"
+                    backgroundImage='https://images.wallpaperscraft.com/image/single/skyscraper_building_architecture_112550_1600x900.jpg'
+                    logoText="ArchiQ"
+                    description="ArchiQ merges visionary design and expert craftsmanship to deliver sustainable, high-quality construction projects tailored to each client's unique vision."
+                    detailLink="/user/about"
                     detailText="Learn more"
                 />
 
