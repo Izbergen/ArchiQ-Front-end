@@ -16,7 +16,11 @@ import {
   AspectRatio,
   Skeleton,
   Icon,
+  Popover,
+  Portal,
+  Field,
   Input,
+  Textarea,
 } from "@chakra-ui/react";
 import { FONTS } from "@/general/constants";
 import { useDI } from "@/general/hooks/useDI";
@@ -24,14 +28,23 @@ import { CoreTypes } from "@/general/di/modules/core";
 import type { IAxiosService } from "@/general/services/axios";
 import { toaster } from "@/general/components/ui/toaster";
 import { Property, PropertyPhoto, PropertyVideo } from "@/general/types/property.types";
-import { FaBed, FaRuler, FaBuilding, FaChevronLeft, FaPhone } from "react-icons/fa";
+import { FaBed, FaRuler, FaBuilding, FaChevronLeft, FaPhone, FaExclamationTriangle } from "react-icons/fa";
 import { PhoneInput } from "@/pages/auth/_general/components";
 
 const API_URL = "https://api.slyamgazy.kz/properties/";
 const APPLICATION_URL = "applications/apply/";
+const REPORT_URL = "https://api.slyamgazy.kz/support/reports/";
 
 // Placeholder image in case property has no photos
 const PLACEHOLDER_IMAGE = "https://via.placeholder.com/800x600?text=No+Image+Available";
+
+// Report issue types
+const REPORT_TYPES = [
+  { value: "INCORRECT_INFO", label: "Incorrect Information" },
+  { value: "PRICE_ISSUE", label: "Price Issue" },
+  { value: "PHOTO_ISSUE", label: "Photo Issue" },
+  { value: "OTHER", label: "Other" },
+];
 
 const ApartmentDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -43,6 +56,13 @@ const ApartmentDetailPage = () => {
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [showContactForm, setShowContactForm] = useState(false);
+  
+  // Report form state
+  const [showReportForm, setShowReportForm] = useState(false);
+  const [reportType, setReportType] = useState("");
+  const [reportDescription, setReportDescription] = useState("");
+  const [reportFiles, setReportFiles] = useState<FileList | null>(null);
+  const [reportSubmitting, setReportSubmitting] = useState(false);
   
   const axiosService = useDI<IAxiosService>(CoreTypes.AxiosService);
 
@@ -86,6 +106,47 @@ const ApartmentDetailPage = () => {
       toaster.error("Failed to submit request. Please try again.");
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleSubmitReport = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!property) return;
+    
+    setReportSubmitting(true);
+    try {
+      // Create FormData object for multipart/form-data
+      const formData = new FormData();
+      formData.append("property", property.id.toString());
+      formData.append("report_type", reportType);
+      formData.append("description", reportDescription);
+      
+      // Append files if any
+      if (reportFiles && reportFiles.length > 0) {
+        for (let i = 0; i < reportFiles.length; i++) {
+          formData.append("files", reportFiles[i]);
+        }
+      }
+      
+      // Send the report
+      await axiosService.post(REPORT_URL, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      
+      toaster.success("Report submitted successfully");
+      
+      // Reset form and close modal
+      setReportType("");
+      setReportDescription("");
+      setReportFiles(null);
+      setShowReportForm(false);
+    } catch (error) {
+      console.error("Error submitting report:", error);
+      toaster.error("Failed to submit report. Please try again.");
+    } finally {
+      setReportSubmitting(false);
     }
   };
 
@@ -297,7 +358,7 @@ const ApartmentDetailPage = () => {
                 fontSize="28px" 
                 color="#52A0FF"
               >
-                {property.price} ₸
+                {property.price.toLocaleString('ru-RU')} ₸
               </Heading>
               
               <Box h="1px" bg="gray.200" />
@@ -330,7 +391,7 @@ const ApartmentDetailPage = () => {
                 {property.price_per_sqm && (
                   <HStack justifyContent="space-between">
                     <Text fontFamily={FONTS.StyreneALC.MEDIUM}>Price per m²</Text>
-                    <Text fontWeight="bold">{property.price_per_sqm}</Text>
+                    <Text fontWeight="bold">{property.price_per_sqm.toLocaleString('ru-RU')} ₸</Text>
                   </HStack>
                 )}
                 
@@ -378,6 +439,119 @@ const ApartmentDetailPage = () => {
                   <Icon as={FaPhone} mr={2} />
                   Request a Consultation
                 </Button>
+                
+                <Popover.Root open={showReportForm} onOpenChange={details => setShowReportForm(details.open)}>
+                  <Popover.Trigger asChild>
+                    <Button
+                      colorScheme="red"
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowReportForm(true)}
+                    >
+                      <Icon as={FaExclamationTriangle} mr={2} />
+                      Report an Issue
+                    </Button>
+                  </Popover.Trigger>
+                  
+                  <Portal>
+                    <Popover.Positioner>
+                      <Popover.Content width="500px" p={6} borderRadius="xl">
+                        <Popover.Arrow />
+                        <Button
+                          position="absolute"
+                          right={2}
+                          top={2}
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowReportForm(false)}
+                        >
+                          ×
+                        </Button>
+                        <Popover.Header fontFamily={FONTS.StyreneALC.BOLD} color="#52A0FF">
+                          Report an Issue
+                        </Popover.Header>
+                        
+                        <form onSubmit={handleSubmitReport}>
+                          <Popover.Body>
+                            <VStack gap={4} align="stretch">
+                              <Field.Root>
+                                <Field.Label fontFamily={FONTS.StyreneALC.MEDIUM}>Issue Type</Field.Label>
+                                <select 
+                                  value={reportType}
+                                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setReportType(e.target.value)}
+                                  style={{
+                                    fontFamily: FONTS.StyreneALC.REGULAR,
+                                    width: '100%',
+                                    padding: '8px',
+                                    borderRadius: '8px',
+                                    border: '1px solid #E2E8F0',
+                                  }}
+                                >
+                                  <option value="">Select issue type</option>
+                                  {REPORT_TYPES.map(type => (
+                                    <option key={type.value} value={type.value}>
+                                      {type.label}
+                                    </option>
+                                  ))}
+                                </select>
+                              </Field.Root>
+                              
+                              <Field.Root>
+                                <Field.Label fontFamily={FONTS.StyreneALC.MEDIUM}>Description</Field.Label>
+                                <Textarea 
+                                  placeholder="Please describe the issue in detail..."
+                                  value={reportDescription}
+                                  onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setReportDescription(e.target.value)}
+                                  fontFamily={FONTS.StyreneALC.REGULAR}
+                                  rows={4}
+                                />
+                                <Field.HelperText>
+                                  Provide as much detail as possible to help us understand the issue.
+                                </Field.HelperText>
+                              </Field.Root>
+                              
+                              <Field.Root>
+                                <Field.Label fontFamily={FONTS.StyreneALC.MEDIUM}>Attach Files (Optional)</Field.Label>
+                                <Input 
+                                  type="file" 
+                                  multiple
+                                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setReportFiles(e.target.files)}
+                                  accept="image/*,.pdf,.doc,.docx"
+                                  fontFamily={FONTS.StyreneALC.REGULAR}
+                                  p={1}
+                                />
+                                <Field.HelperText>
+                                  You can attach images, PDFs, or documents (max 5 files, 5MB each).
+                                </Field.HelperText>
+                              </Field.Root>
+                            </VStack>
+                          </Popover.Body>
+                          
+                          <Popover.Footer>
+                            <HStack justify="flex-end" gap={3}>
+                              <Button 
+                                variant="ghost" 
+                                onClick={() => setShowReportForm(false)}
+                                fontFamily={FONTS.StyreneALC.MEDIUM}
+                              >
+                                Cancel
+                              </Button>
+                              <Button 
+                                colorScheme="red" 
+                                type="submit"
+                                loading={reportSubmitting}
+                                loadingText="Submitting..."
+                                fontFamily={FONTS.StyreneALC.BOLD}
+                              >
+                                Submit Report
+                              </Button>
+                            </HStack>
+                          </Popover.Footer>
+                        </form>
+                      </Popover.Content>
+                    </Popover.Positioner>
+                  </Portal>
+                </Popover.Root>
                 
                 <Text fontSize="sm" color="gray.600" textAlign="center">
                   Contact us to get more information about this apartment or to schedule a viewing
