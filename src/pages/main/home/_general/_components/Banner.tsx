@@ -4,7 +4,7 @@ import {LuArrowUpRight} from "react-icons/lu";
 import {IBanner} from "../types.ts"
 import React from "react";
 type BannerProps = IBanner
-export const Banner: React.FC<BannerProps> = ({id, title, subtitle, target_link, image_link} : BannerProps) => {
+export const Banner: React.FC<BannerProps> = ({id, title, subtitle, target_url, image_link} : BannerProps) => {
     return (
         <Flex
             key={id}
@@ -54,7 +54,7 @@ export const Banner: React.FC<BannerProps> = ({id, title, subtitle, target_link,
                     <VStack>
                         <Link
                             marginTop="auto"
-                            href={target_link}
+                            href={target_url}
                             color="white"
                             textDecoration="none"
                             _hover={{ textDecoration: 'underline' }}

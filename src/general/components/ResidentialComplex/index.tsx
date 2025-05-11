@@ -34,7 +34,7 @@ const ResidentialComplex: React.FC<ResidenceProps> = ({id="1", name= "SDU Reside
                     </HStack>
                     <VStack >
                         <Heading textAlign={'start'} >{name}</Heading>
-                        <Text>from {down_payment} tng</Text>
+                        <Text>from {down_payment} ₸</Text>
                         <Text>{total_apartment} apartments on sale</Text>
                     </VStack>
                 </VStack>
