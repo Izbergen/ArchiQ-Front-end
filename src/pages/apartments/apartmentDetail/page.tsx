@@ -297,7 +297,7 @@ const ApartmentDetailPage = () => {
                 fontSize="28px" 
                 color="#52A0FF"
               >
-                {property.price} ₸
+                {property.price.toLocaleString('ru-RU')} ₸
               </Heading>
               
               <Box h="1px" bg="gray.200" />
@@ -330,7 +330,7 @@ const ApartmentDetailPage = () => {
                 {property.price_per_sqm && (
                   <HStack justifyContent="space-between">
                     <Text fontFamily={FONTS.StyreneALC.MEDIUM}>Price per m²</Text>
-                    <Text fontWeight="bold">{property.price_per_sqm}</Text>
+                    <Text fontWeight="bold">{property.price_per_sqm.toLocaleString('ru-RU')} ₸</Text>
                   </HStack>
                 )}
                 
