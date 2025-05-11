@@ -30,10 +30,13 @@ export interface Complex {
 export interface Block {
   id?: number;
   block_number: string;
+  building_status: string;
+  entrance_number: number;
 }
 
 export interface Property {
   id: number;
+  number: number;
   category: CategoryEnum | string;
   complex: Complex | string;
   price: string;

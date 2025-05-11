@@ -18,8 +18,10 @@ import { FONTS } from "@/general/constants";
 import { useDI } from "@/general/hooks/useDI";
 import { CoreTypes } from "@/general/di/modules/core";
 import type { IAxiosService } from "@/general/services/axios";
-import { FaFile } from "react-icons/fa";
+import { FaFile, FaSignOutAlt } from "react-icons/fa";
 import { toaster } from "@/general/components/ui/toaster";
+import { useTokens } from "@/general/hooks/useToken";
+import { useNavigate } from "react-router-dom";
 
 interface UserProfile {
   id: number;
@@ -58,6 +60,8 @@ const UserPage = () => {
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
   const axiosService = useDI<IAxiosService>(CoreTypes.AxiosService);
+  const tokenService = useTokens();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -114,6 +118,17 @@ const UserPage = () => {
     });
   };
 
+  const handleLogout = () => {
+    // Clear the tokens from localStorage
+    tokenService.setAccessToken('');
+    tokenService.setRefreshToken('');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    
+    toaster.success("Successfully logged out");
+    navigate('/auth');
+  };
+
   if (loading) {
     return (
         <Flex align="center" justify="center" minH="100vh">
@@ -164,15 +179,28 @@ const UserPage = () => {
                 )}
               </Box>
             </Flex>
-            {editMode ? (
-                <Button colorScheme="green" size="sm" borderRadius="md" onClick={handleSave}>
-                  Save
-                </Button>
-            ) : (
-                <Button colorScheme="blue" size="sm" borderRadius="md" onClick={handleEditClick}>
-                  Edit
-                </Button>
-            )}
+            <HStack gap={2}>
+              {editMode ? (
+                  <Button colorScheme="green" size="sm" borderRadius="md" onClick={handleSave}>
+                    Save
+                  </Button>
+              ) : (
+                  <>
+                    <Button colorScheme="blue" size="sm" borderRadius="md" onClick={handleEditClick}>
+                      Edit
+                    </Button>
+                    <Button 
+                      colorScheme="red" 
+                      size="sm" 
+                      borderRadius="md" 
+                      onClick={handleLogout}
+                    >
+                      <Icon as={FaSignOutAlt} mr={2} />
+                      Logout
+                    </Button>
+                  </>
+              )}
+            </HStack>
           </Flex>
 
           <Flex>
