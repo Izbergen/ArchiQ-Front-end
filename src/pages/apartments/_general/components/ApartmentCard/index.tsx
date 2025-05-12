@@ -105,7 +105,7 @@ const ApartmentCard = ({ property }: ApartmentCardProps) => {
             />
             <HStack justify={'space-between'}>
                 <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'20px'} color={"#52A0FF"}>{property.area} m² </Heading>
-                <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'20px'} color={"#52A0FF"}>{property.price} ₸</Heading>
+                <Heading fontFamily={FONTS.StyreneALC.BOLD} fontSize={'20px'} color={"#52A0FF"}>{property.price.toLocaleString()} ₸</Heading>
             </HStack>
             <Popover.Root open={popoverOpen} onOpenChange={details => setPopoverOpen(details.open)}>
                 <Popover.Trigger asChild>
