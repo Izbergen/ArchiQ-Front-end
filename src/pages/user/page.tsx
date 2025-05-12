@@ -8,7 +8,6 @@ import {
   HStack,
   VStack,
   Icon,
-  Image,
   Input,
   Field,
   Table,
@@ -29,7 +28,6 @@ interface UserProfile {
   first_name: string;
   last_name: string;
 }
-
 interface Property {
   id: number;
   category: string;
@@ -50,16 +48,17 @@ interface Property {
     total_floors: number;
     building_status: string;
   };
-  complex: string;
+  complex: {
+    id: number;
+    name: string;
+    address: string;
+    class_type: string;
+    district: {
+      id: number;
+      name: string;
+    };
+  };
 }
-
-// Report issue types
-const REPORT_TYPES = [
-  { value: "INCORRECT_INFO", label: "Incorrect Information" },
-  { value: "PRICE_ISSUE", label: "Price Issue" },
-  { value: "PHOTO_ISSUE", label: "Photo Issue" },
-  { value: "OTHER", label: "Other" },
-];
 
 const REPORT_URL = "https://api.slyamgazy.kz/support/reports/";
 
@@ -322,15 +321,9 @@ const UserPage = () => {
                             <Table.Row key={property.id}>
                               <Table.Cell>
                                 <Flex align="center">
-                                  <Image
-                                      src={property.property_photos?.[0]?.photo_link || "https://via.placeholder.com/60"}
-                                      borderRadius="md"
-                                      boxSize="40px"
-                                      objectFit="cover"
-                                      mr={3}
-                                      alt="Property"
-                                  />
-                                  {property.category}
+
+                                  {property.complex.name} {property.complex.address}
+
                                 </Flex>
                               </Table.Cell>
                               <Table.Cell>{property.number}</Table.Cell>
@@ -388,28 +381,6 @@ const UserPage = () => {
                 </Heading>
                 <form onSubmit={handleSubmitReport}>
                   <VStack gap={4} align="stretch">
-                    <Field.Root>
-                      <Field.Label>Issue Type</Field.Label>
-                      <select
-                        value={reportType}
-                        onChange={e => setReportType(e.target.value)}
-                        style={{
-                          fontFamily: FONTS.StyreneALC.REGULAR,
-                          width: '100%',
-                          padding: '8px',
-                          borderRadius: '8px',
-                          border: '1px solid #E2E8F0',
-                        }}
-                        required
-                      >
-                        <option value="">Select issue type</option>
-                        {REPORT_TYPES.map(type => (
-                          <option key={type.value} value={type.value}>
-                            {type.label}
-                          </option>
-                        ))}
-                      </select>
-                    </Field.Root>
                     <Field.Root>
                       <Field.Label>Title</Field.Label>
                       <Input
