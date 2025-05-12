@@ -8,17 +8,17 @@ import {
   HStack,
   VStack,
   Icon,
-  Image,
   Input,
   Field,
   Table,
   Spinner,
+  Tabs,
 } from "@chakra-ui/react";
 import { FONTS } from "@/general/constants";
 import { useDI } from "@/general/hooks/useDI";
 import { CoreTypes } from "@/general/di/modules/core";
 import type { IAxiosService } from "@/general/services/axios";
-import { FaFile, FaSignOutAlt, FaExclamationTriangle } from "react-icons/fa";
+import { FaSignOutAlt, FaExclamationTriangle } from "react-icons/fa";
 import { toaster } from "@/general/components/ui/toaster";
 import { useTokens } from "@/general/hooks/useToken";
 import { useNavigate } from "react-router-dom";
@@ -50,18 +50,40 @@ interface Property {
     total_floors: number;
     building_status: string;
   };
-  complex: string;
+  complex: {
+    id: number;
+    name: string;
+    address: string;
+    class_type: string;
+    district: {
+      id: number;
+      name: string;
+    };
+  };
 }
 
-// Report issue types
-const REPORT_TYPES = [
-  { value: "INCORRECT_INFO", label: "Incorrect Information" },
-  { value: "PRICE_ISSUE", label: "Price Issue" },
-  { value: "PHOTO_ISSUE", label: "Photo Issue" },
-  { value: "OTHER", label: "Other" },
-];
+interface UserReport {
+  id: number;
+  title: string;
+  content: string;
+  status: string;
+  created_at: string;
+  property: number;
+  report_type: string;
+}
 
 const REPORT_URL = "https://api.slyamgazy.kz/support/reports/";
+
+// Helper to get property info by id
+function getPropertyInfo(propertyId: number, properties: Property[]) {
+  const prop = properties.find(p => p.id === propertyId);
+  if (!prop) return { name: 'N/A', address: '' };
+  return {
+    name: prop.complex?.name || 'N/A',
+    address: prop.complex?.address || '',
+    number: prop.number ? String(prop.number) : '',
+  };
+}
 
 const UserPage = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -79,6 +101,8 @@ const UserPage = () => {
   const [reportDescription, setReportDescription] = useState("");
   const [reportFiles, setReportFiles] = useState<FileList | null>(null);
   const [reportSubmitting, setReportSubmitting] = useState(false);
+  const [reports, setReports] = useState<UserReport[]>([]);
+  const [reportsLoading, setReportsLoading] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -95,6 +119,26 @@ const UserPage = () => {
         if (propertiesResponse) {
           setProperties(propertiesResponse);
         }
+
+        // Fetch user reports
+        setReportsLoading(true);
+        try {
+          const accessToken = localStorage.getItem('access_token') || tokenService.getAccessToken();
+          const res = await fetch(REPORT_URL, {
+            headers: {
+              ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+            },
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setReports(Array.isArray(data) ? data : data.results || []);
+          } else {
+            setReports([]);
+          }
+        } catch (err) {
+          setReports([]);
+        }
+        setReportsLoading(false);
       } catch (error) {
         console.error('Error fetching user data:', error);
         toaster.error("Error loading profile data");
@@ -276,87 +320,135 @@ const UserPage = () => {
           </Flex>
 
           <Flex>
-            <VStack
-                align="start"
-                width="200px"
-                p={6}
-                gap={4}
-                borderRightWidth="1px"
-                borderColor="gray.200"
-            >
-              <HStack color="#52A0FF" fontWeight="bold">
-                <Icon as={FaFile} />
-                <Text>My Properties</Text>
-              </HStack>
-            </VStack>
+
 
             <Box flex="1" p={6}>
-              <Heading
-                  as="h2"
-                  size="lg"
-                  color="#52A0FF"
-                  mb={2}
-                  fontFamily={FONTS.StyreneALC.MEDIUM}
-              >
-                My Properties
-              </Heading>
-              <Text mb={6} fontSize="sm" color="gray.600">
-                Manage your properties, view details, and submit requests
-              </Text>
-
-              {/* Properties Table */}
-              <Box overflowX="auto">
-                <Table.Root>
-                  <Table.Header>
-                    <Table.Row>
-                      <Table.ColumnHeader>Property</Table.ColumnHeader>
-                      <Table.ColumnHeader>Unit Number</Table.ColumnHeader>
-                      <Table.ColumnHeader>Floor</Table.ColumnHeader>
-                      <Table.ColumnHeader>Building Status</Table.ColumnHeader>
-                      <Table.ColumnHeader>Actions</Table.ColumnHeader>
-                    </Table.Row>
-                  </Table.Header>
-                  <Table.Body>
-                    {properties.length > 0 ? (
-                        properties.map((property) => (
-                            <Table.Row key={property.id}>
-                              <Table.Cell>
-                                <Flex align="center">
-                                  <Image
-                                      src={property.property_photos?.[0]?.photo_link || "https://via.placeholder.com/60"}
-                                      borderRadius="md"
-                                      boxSize="40px"
-                                      objectFit="cover"
-                                      mr={3}
-                                      alt="Property"
-                                  />
-                                  {property.category}
-                                </Flex>
-                              </Table.Cell>
-                              <Table.Cell>{property.number}</Table.Cell>
-                              <Table.Cell>{property.floor}</Table.Cell>
-                              <Table.Cell>{property.block?.building_status || "N/A"}</Table.Cell>
-                              <Table.Cell>
-                                <Button
-                                  size="xs"
-                                  colorScheme="red"
-                                  onClick={() => openReportModal(property.id)}
-                                >
-                                  <Icon as={FaExclamationTriangle} mr={1} /> Report
-                                </Button>
+              <Tabs.Root defaultValue="properties" colorScheme="blue" variant="enclosed">
+                <Tabs.List>
+                  <Tabs.Trigger value="properties">My Properties</Tabs.Trigger>
+                  <Tabs.Trigger value="reports">My Reports</Tabs.Trigger>
+                </Tabs.List>
+                <Tabs.Content value="properties">
+                  <Box px={0}>
+                    <Heading
+                      as="h2"
+                      size="lg"
+                      color="#52A0FF"
+                      mb={2}
+                      fontFamily={FONTS.StyreneALC.MEDIUM}
+                    >
+                      My Properties
+                    </Heading>
+                    <Text mb={6} fontSize="sm" color="gray.600">
+                      Manage your properties, view details, and submit requests
+                    </Text>
+                    <Box overflowX="auto">
+                      <Table.Root>
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.ColumnHeader>Property</Table.ColumnHeader>
+                            <Table.ColumnHeader>Unit Number</Table.ColumnHeader>
+                            <Table.ColumnHeader>Floor</Table.ColumnHeader>
+                            <Table.ColumnHeader>Building Status</Table.ColumnHeader>
+                            <Table.ColumnHeader>Actions</Table.ColumnHeader>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {properties.length > 0 ? (
+                            properties.map((property) => (
+                              <Table.Row key={property.id}>
+                                <Table.Cell>
+                                  <Flex align="center">
+                                    {property.complex.name} {property.complex.address}
+                                  </Flex>
+                                </Table.Cell>
+                                <Table.Cell>{property.number}</Table.Cell>
+                                <Table.Cell>{property.floor}</Table.Cell>
+                                <Table.Cell>{property.block?.building_status || "N/A"}</Table.Cell>
+                                <Table.Cell>
+                                  <Button
+                                    size="xs"
+                                    colorScheme="red"
+                                    onClick={() => openReportModal(property.id)}
+                                  >
+                                    <Icon as={FaExclamationTriangle} mr={1} /> Report
+                                  </Button>
+                                </Table.Cell>
+                              </Table.Row>
+                            ))
+                          ) : (
+                            <Table.Row>
+                              <Table.Cell colSpan={5} style={{ textAlign: "center" }}>
+                                No properties found
                               </Table.Cell>
                             </Table.Row>
-                        ))
-                    ) : (
-                        <Table.Row>
-                          <Table.Cell colSpan={5} style={{ textAlign: "center" }}>
-                            No properties found
-                          </Table.Cell>
-                        </Table.Row>
-                    )}
-                  </Table.Body>
-                </Table.Root>
-              </Box>
+                          )}
+                        </Table.Body>
+                      </Table.Root>
+                    </Box>
+                  </Box>
+                </Tabs.Content>
+                <Tabs.Content value="reports">
+                  <Box px={0}>
+                    <Heading
+                      as="h2"
+                      size="lg"
+                      color="#52A0FF"
+                      mb={2}
+                      fontFamily={FONTS.StyreneALC.MEDIUM}
+                    >
+                      My Reports
+                    </Heading>
+                    <Text mb={6} fontSize="sm" color="gray.600">
+                      View all your submitted reports and their statuses
+                    </Text>
+                    <Box overflowX="auto">
+                      <Table.Root>
+                        <Table.Header>
+                          <Table.Row>
+                            <Table.ColumnHeader>Title</Table.ColumnHeader>
+                            <Table.ColumnHeader>Property</Table.ColumnHeader>
+                            <Table.ColumnHeader>Status</Table.ColumnHeader>
+                            <Table.ColumnHeader>Created</Table.ColumnHeader>
+                          </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                          {reportsLoading ? (
+                            <Table.Row>
+                              <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
+                                <Spinner size="sm" /> Loading reports...
+                              </Table.Cell>
+                            </Table.Row>
+                          ) : reports.length > 0 ? (
+                            reports.map((report) => (
+                              <Table.Row key={report.id}>
+                                <Table.Cell>{report.title}</Table.Cell>
+                                <Table.Cell>
+                                  {(() => {
+                                    const info = getPropertyInfo(report.property, properties);
+                                    let result = info.name;
+                                    if (info.address) result += ' - ' + info.address;
+                                    if (info.number) result += ' (Apt. ' + info.number + ')';
+                                    return result;
+                                  })()}
+                                </Table.Cell>
+                                <Table.Cell>{report.status}</Table.Cell>
+                                <Table.Cell>{new Date(report.created_at).toLocaleString()}</Table.Cell>
+                              </Table.Row>
+                            ))
+                          ) : (
+                            <Table.Row>
+                              <Table.Cell colSpan={4} style={{ textAlign: "center" }}>
+                                No reports found
+                              </Table.Cell>
+                            </Table.Row>
+                          )}
+                        </Table.Body>
+                      </Table.Root>
+                    </Box>
+                  </Box>
+                </Tabs.Content>
+              </Tabs.Root>
             </Box>
           </Flex>
 
@@ -388,28 +480,6 @@ const UserPage = () => {
                 </Heading>
                 <form onSubmit={handleSubmitReport}>
                   <VStack gap={4} align="stretch">
-                    <Field.Root>
-                      <Field.Label>Issue Type</Field.Label>
-                      <select
-                        value={reportType}
-                        onChange={e => setReportType(e.target.value)}
-                        style={{
-                          fontFamily: FONTS.StyreneALC.REGULAR,
-                          width: '100%',
-                          padding: '8px',
-                          borderRadius: '8px',
-                          border: '1px solid #E2E8F0',
-                        }}
-                        required
-                      >
-                        <option value="">Select issue type</option>
-                        {REPORT_TYPES.map(type => (
-                          <option key={type.value} value={type.value}>
-                            {type.label}
-                          </option>
-                        ))}
-                      </select>
-                    </Field.Root>
                     <Field.Root>
                       <Field.Label>Title</Field.Label>
                       <Input
