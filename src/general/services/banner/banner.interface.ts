@@ -4,7 +4,7 @@ export  interface IBanner  {
     title: string;
     subtitle: string;
     image_link: string;
-    target_link: string;
+    target_url: string;
 
 }
 

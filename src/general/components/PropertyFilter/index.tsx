@@ -59,6 +59,7 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
         minFloor: floorRange[0],
         maxFloor: floorRange[1],
     };
+
     const [filtersDraft, setFiltersDraft] = useState<PropertyFilters>(defaultFilters);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [_ , setAppliedFilters] = useState<PropertyFilters>(defaultFilters);
@@ -157,6 +158,7 @@ export const PropertyFilter: React.FC<PropertyFilterProps> = ({ complexes = [], 
                     <Box>
                         <Text mb={1}>Area, m²</Text>
                         <HStack>
+
                             <Input
                                 type="number"
                                 value={filtersDraft.minArea}
