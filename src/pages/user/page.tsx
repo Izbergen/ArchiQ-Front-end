@@ -29,6 +29,7 @@ interface UserProfile {
   first_name: string;
   last_name: string;
 }
+
 interface Property {
   id: number;
   category: string;
